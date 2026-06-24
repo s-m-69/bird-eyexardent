@@ -321,6 +321,97 @@ body::before{
 }
 .gc-note-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.50);flex-shrink:0}
 
+/* WELCOME MODAL */
+.welcome-wrap{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,.88);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  opacity:0;pointer-events:none;
+  transition:opacity .5s;
+}
+.welcome-wrap.on{opacity:1;pointer-events:all}
+.welcome{
+  background:rgba(12,12,12,.98);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:28px;
+  padding:52px;
+  max-width:560px;width:100%;
+  box-shadow:0 40px 100px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.08);
+}
+.welcome-eyebrow{
+  font-size:9px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(255,255,255,.22);margin-bottom:28px;
+  display:flex;align-items:center;gap:10px;
+}
+.welcome-eyebrow::before{content:'';width:20px;height:1px;background:rgba(255,255,255,.18)}
+.welcome-title{
+  font-size:26px;font-weight:300;color:rgba(255,255,255,.92);
+  letter-spacing:-.02em;line-height:1.25;margin-bottom:28px;
+}
+.welcome-title strong{font-weight:500}
+.welcome-p{
+  font-size:13px;font-weight:400;color:rgba(255,255,255,.40);
+  line-height:1.85;margin-bottom:14px;
+}
+.welcome-p:last-of-type{margin-bottom:0}
+.welcome-divider{height:1px;background:rgba(255,255,255,.07);margin:32px 0}
+.welcome-footer{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.welcome-credit{font-size:10px;font-weight:400;color:rgba(255,255,255,.18);letter-spacing:.03em}
+.welcome-btn{
+  background:rgba(255,255,255,.92);color:#000;
+  font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  border:none;border-radius:100px;padding:13px 26px;
+  cursor:pointer;transition:background .15s;white-space:nowrap;flex-shrink:0;
+}
+.welcome-btn:hover{background:#fff}
+
+/* APPROVE BUTTON IN ISLAND */
+.island-approve{
+  font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#000;background:rgba(255,255,255,.88);
+  padding:6px 14px;border-radius:100px;
+  cursor:pointer;transition:background .15s;margin-left:2px;white-space:nowrap;
+  border:none;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+.island-approve:hover{background:#fff}
+
+/* APPROVE MODAL */
+.approve-wrap{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.approve-wrap.on{opacity:1;pointer-events:all}
+.approve-modal{
+  background:rgba(14,14,14,.97);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;padding:40px 44px;
+  max-width:440px;width:100%;
+  box-shadow:0 32px 80px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08);
+}
+.approve-title{font-size:18px;font-weight:400;color:rgba(255,255,255,.92);margin-bottom:10px;letter-spacing:-.01em}
+.approve-body{font-size:12.5px;font-weight:400;color:rgba(255,255,255,.38);line-height:1.75;margin-bottom:28px}
+.approve-btns{display:flex;gap:10px;justify-content:flex-end}
+.approve-cancel{
+  font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.38);background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);border-radius:100px;
+  padding:9px 20px;cursor:pointer;font-family:inherit;transition:all .15s;
+}
+.approve-cancel:hover{color:rgba(255,255,255,.70);background:rgba(255,255,255,.10)}
+.approve-confirm{
+  font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#000;background:rgba(255,255,255,.92);
+  border:1px solid transparent;border-radius:100px;
+  padding:9px 20px;cursor:pointer;font-family:inherit;transition:all .15s;
+}
+.approve-confirm:hover{background:#fff}
+
 /* MASTER SEND BUTTON */
 .master-btn{
   position:fixed;bottom:32px;right:32px;z-index:150;
@@ -417,7 +508,7 @@ body::before{
 .footer-r{font-size:10px;font-weight:400;color:rgba(255,255,255,.18);letter-spacing:.04em}
 
 @media(max-width:768px){
-  /* ISLAND — collapsed by default */
+  /* ISLAND : collapsed by default */
   .island{
     top:14px;
     padding:0 18px;
@@ -430,7 +521,7 @@ body::before{
   .island-mobile-lbl{display:flex}
   .island-mark,.island-nav,.island-sep,.island-client{display:none}
 
-  /* ISLAND — expanded */
+  /* ISLAND : expanded */
   .island.expanded{
     height:auto;
     border-radius:20px;
@@ -445,6 +536,13 @@ body::before{
   .island.expanded .island-sep{display:none}
   .island.expanded .island-client{display:none}
   .island.expanded .island-btn{text-align:center;padding:10px 16px;font-size:12px;width:100%;border-radius:12px}
+  .island-approve{display:none}
+  .island.expanded .island-approve{display:block;width:100%;text-align:center;padding:10px;border-radius:12px;margin-top:4px}
+  .welcome{padding:36px 28px;border-radius:20px}
+  .welcome-title{font-size:20px}
+  .welcome-p{font-size:12px}
+  .welcome-footer{flex-direction:column;align-items:flex-start;gap:14px}
+  .welcome-btn{width:100%;text-align:center;padding:14px}
 
   /* HERO */
   .hero{padding:100px 24px 48px}
@@ -455,20 +553,20 @@ body::before{
   .section{padding:48px 16px}
   .section-hdr{margin-bottom:24px}
 
-  /* PAGE GRID — single column */
+  /* PAGE GRID : single column */
   .pgrid{grid-template-columns:1fr;gap:10px}
   .gc{padding:22px 18px 18px}
   .gc-title{font-size:17px}
   .gc-desc{font-size:12px}
   .gc-cta{top:20px;right:18px;font-size:16px}
 
-  /* APP GRID — 2 cols */
+  /* APP GRID : 2 cols */
   .agrid{grid-template-columns:repeat(2,1fr);gap:8px}
   .atile{padding:14px 12px}
   .atile-n{font-size:11.5px}
   .atile-r{font-size:10px}
 
-  /* PROMO GRID — 1 col */
+  /* PROMO GRID : 1 col */
   .pgrd{grid-template-columns:1fr;gap:8px}
 
   /* BOTTOM SHEET */
@@ -510,6 +608,7 @@ body::before{
   </nav>
   <span class="island-sep"></span>
   <span class="island-client">Bird Eye</span>
+  <button class="island-approve" onclick="showApprove()">Approve</button>
 </div>
 
 <!-- HERO -->
@@ -550,6 +649,33 @@ body::before{
   <span class="footer-l">Ardent</span>
   <span class="footer-r">Prepared for Bird Eye &nbsp;&middot;&nbsp; June 2026</span>
 </footer>
+
+<!-- WELCOME MODAL -->
+<div class="welcome-wrap" id="welcomeWrap">
+  <div class="welcome">
+    <div class="welcome-title">Welcome to the build, <strong>Bird Eye.</strong></div>
+    <p class="welcome-p">We took everything you shared with us and turned it into this buildbook. Every page, every feature, and every decision is documented here so that as we build, we are always working from the same vision.</p>
+    <p class="welcome-p">Think of this as our shared north star. Whenever there is a question about direction during the build, we come back to this. It keeps our team focused and the project on course from day one all the way to launch.</p>
+    <p class="welcome-p">Take your time reviewing it. If anything needs revisiting, leave a note and we will work through it together. Once you are happy with everything, approve it and we will hand it to our design and development team to begin.</p>
+    <div class="welcome-divider"></div>
+    <div class="welcome-footer">
+      <span class="welcome-credit">Ardent x Bird Eye &nbsp;&middot;&nbsp; Confidential</span>
+      <button class="welcome-btn" onclick="dismissWelcome()">Begin Review</button>
+    </div>
+  </div>
+</div>
+
+<!-- APPROVE MODAL -->
+<div class="approve-wrap" id="approveWrap">
+  <div class="approve-modal">
+    <div class="approve-title">Approve Buildbook</div>
+    <div class="approve-body">By approving, you confirm that this buildbook accurately reflects your vision for the Bird Eye website. It will be sent to the Ardent design and development team to begin execution.</div>
+    <div class="approve-btns">
+      <button class="approve-cancel" onclick="closeApprove()">Go Back</button>
+      <button class="approve-confirm" onclick="confirmApprove()">Yes, Approve</button>
+    </div>
+  </div>
+</div>
 
 <!-- MASTER SEND -->
 <button class="master-btn" onclick="showSendModal()">
@@ -874,6 +1000,30 @@ function closeSheet(){
   document.getElementById('overlay').classList.remove('on');
   document.body.style.overflow='';
 }
+// Welcome modal
+(function(){
+  setTimeout(function(){
+    document.getElementById('welcomeWrap').classList.add('on');
+  },300);
+})();
+function dismissWelcome(){
+  document.getElementById('welcomeWrap').classList.remove('on');
+}
+
+// Approve
+function showApprove(){
+  document.getElementById('approveWrap').classList.add('on');
+}
+function closeApprove(){
+  document.getElementById('approveWrap').classList.remove('on');
+}
+function confirmApprove(){
+  var subject=encodeURIComponent('Bird Eye Buildbook: Approved');
+  var body=encodeURIComponent('Hi Shivam,\n\nThe Bird Eye buildbook has been approved.\n\nThe build is ready to move to the design and development team for execution.\n\nApproved on: '+new Date().toLocaleString());
+  closeApprove();
+  window.location.href='mailto:shivamrmahtani@gmail.com?subject='+subject+'&body='+body;
+}
+
 function toggleIsland(e){
   if(window.innerWidth>768)return;
   e.stopPropagation();
