@@ -284,14 +284,17 @@ body::before{
   background:rgba(255,255,255,.08);
   border:1px solid rgba(255,255,255,.14);
   color:rgba(255,255,255,.65);
-  font-size:24px;line-height:1;
+  font-size:20px;
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;z-index:10;transition:all .2s;
-  font-family:inherit;box-shadow:0 4px 16px rgba(0,0,0,.4);
-  font-weight:300;
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  box-shadow:0 4px 16px rgba(0,0,0,.4);
+  font-weight:300;padding:0;line-height:1;
+  text-align:center;
 }
 .note-fab:hover{background:rgba(255,255,255,.14);color:rgba(255,255,255,.95)}
 .note-fab.has-note{border-color:rgba(255,255,255,.35);color:rgba(255,255,255,.9)}
+.note-fab.open{background:rgba(255,255,255,.12);color:rgba(255,255,255,.95);border-color:rgba(255,255,255,.25)}
 .note-popup{
   position:absolute;bottom:78px;right:24px;
   width:290px;
@@ -741,7 +744,12 @@ body::before{
       <span class="note-popup-status" id="shNotesStatus"></span>
     </div>
   </div>
-  <button class="note-fab" id="noteFab" onclick="toggleNotePopup()">+</button>
+  <button class="note-fab" id="noteFab" onclick="toggleNotePopup()">
+    <svg id="noteFabIcon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="7" y1="0" x2="7" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="0" y1="7" x2="14" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
 </div>
 
 <script>
@@ -928,8 +936,15 @@ function openSheet(idx){
   document.body.style.overflow='hidden';
 }
 
+var ICON_PLUS='<line x1="7" y1="0" x2="7" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="0" y1="7" x2="14" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>';
+var ICON_CLOSE='<line x1="1" y1="1" x2="13" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="13" y1="1" x2="1" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>';
 function toggleNotePopup(){
-  document.getElementById('notePopup').classList.toggle('on');
+  var popup=document.getElementById('notePopup');
+  var fab=document.getElementById('noteFab');
+  var icon=document.getElementById('noteFabIcon');
+  var isOpen=popup.classList.toggle('on');
+  if(icon)icon.innerHTML=isOpen?ICON_CLOSE:ICON_PLUS;
+  fab.classList.toggle('open',isOpen);
 }
 function saveNote(){
   var note=document.getElementById('shNotesTa').value.trim();
@@ -1024,6 +1039,10 @@ function closeSheet(){
   document.getElementById('sheet').classList.remove('on');
   document.getElementById('overlay').classList.remove('on');
   document.getElementById('notePopup').classList.remove('on');
+  var fab=document.getElementById('noteFab');
+  var icon=document.getElementById('noteFabIcon');
+  if(fab){fab.classList.remove('open');}
+  if(icon)icon.innerHTML=ICON_PLUS;
   document.body.style.overflow='';
 }
 // Welcome modal
