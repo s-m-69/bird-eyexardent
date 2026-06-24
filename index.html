@@ -59,6 +59,11 @@ body::before{
   background:rgba(255,255,255,.09);
 }
 .island-sep{width:1px;height:14px;background:rgba(255,255,255,.07);margin:0 4px}
+.island-mobile-lbl{
+  display:none;
+  font-size:11px;font-weight:500;letter-spacing:.06em;
+  color:rgba(255,255,255,.82);
+}
 .island-client{
   font-size:10px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;
   color:rgba(255,255,255,.30);
@@ -411,25 +416,92 @@ body::before{
 .footer-l{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.28)}
 .footer-r{font-size:10px;font-weight:400;color:rgba(255,255,255,.18);letter-spacing:.04em}
 
-@media(max-width:960px){
-  .pgrid{grid-template-columns:repeat(2,1fr)}
-  .agrid{grid-template-columns:repeat(3,1fr)}
-  .pgrd{grid-template-columns:repeat(2,1fr)}
-  .section{padding:64px 28px}
-  .island{max-width:calc(100vw - 32px)}
-}
-@media(max-width:640px){
-  .pgrid,.agrid,.pgrd{grid-template-columns:1fr}
-  .hero{padding:0 32px}
-  .hero-name{font-size:clamp(56px,16vw,80px)}
-  .island-btn{display:none}
+@media(max-width:768px){
+  /* ISLAND — collapsed by default */
+  .island{
+    top:14px;
+    padding:0 18px;
+    height:40px;
+    cursor:pointer;
+    transition:height .3s cubic-bezier(.4,0,.2,1);
+    flex-direction:row;
+    overflow:hidden;
+  }
+  .island-mobile-lbl{display:flex}
+  .island-mark,.island-nav,.island-sep,.island-client{display:none}
+
+  /* ISLAND — expanded */
+  .island.expanded{
+    height:auto;
+    border-radius:20px;
+    padding:12px 8px;
+    flex-direction:column;
+    gap:8px;
+    align-items:center;
+  }
+  .island.expanded .island-mobile-lbl{display:flex;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08);width:100%;justify-content:center}
+  .island.expanded .island-nav{display:flex;flex-direction:column;width:100%;gap:2px}
+  .island.expanded .island-mark{display:none}
+  .island.expanded .island-sep{display:none}
+  .island.expanded .island-client{display:none}
+  .island.expanded .island-btn{text-align:center;padding:10px 16px;font-size:12px;width:100%;border-radius:12px}
+
+  /* HERO */
+  .hero{padding:100px 24px 48px}
+  .hero-name{font-size:42px;letter-spacing:-.03em}
+  .hero-sub{font-size:13px;margin-top:10px}
+
+  /* SECTIONS */
+  .section{padding:48px 16px}
+  .section-hdr{margin-bottom:24px}
+
+  /* PAGE GRID — single column */
+  .pgrid{grid-template-columns:1fr;gap:10px}
+  .gc{padding:22px 18px 18px}
+  .gc-title{font-size:17px}
+  .gc-desc{font-size:12px}
+  .gc-cta{top:20px;right:18px;font-size:16px}
+
+  /* APP GRID — 2 cols */
+  .agrid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .atile{padding:14px 12px}
+  .atile-n{font-size:11.5px}
+  .atile-r{font-size:10px}
+
+  /* PROMO GRID — 1 col */
+  .pgrd{grid-template-columns:1fr;gap:8px}
+
+  /* BOTTOM SHEET */
+  .sheet{height:85vh;border-radius:20px 20px 0 0}
+  .sh-hdr{padding:16px 20px 14px;gap:12px}
+  .sh-title{font-size:17px}
+  .sh-body{
+    padding:20px 20px;
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+  .sh-notes{padding:14px 20px 20px}
+  .sh-notes-ta{height:80px}
+  .sh-notes-row{flex-wrap:wrap;gap:8px}
+
+  /* FLOATING BUTTONS */
+  .master-btn{
+    bottom:20px;right:16px;
+    font-size:9px;padding:12px 18px;
+  }
+  .import-wrap{bottom:20px;left:16px}
+  .import-box{width:240px}
+
+  /* FOOTER */
+  .footer{padding:24px 20px;flex-direction:column;gap:6px;text-align:center}
 }
 </style>
 </head>
 <body>
 
 <!-- ISLAND -->
-<div class="island">
+<div class="island" id="island" onclick="toggleIsland(event)">
+  <span class="island-mobile-lbl">Bird Eye x Ardent</span>
   <span class="island-mark">Ardent</span>
   <nav class="island-nav">
     <button class="island-btn on" onclick="scrollTo('#pages')">Pages</button>
@@ -802,10 +874,19 @@ function closeSheet(){
   document.getElementById('overlay').classList.remove('on');
   document.body.style.overflow='';
 }
+function toggleIsland(e){
+  if(window.innerWidth>768)return;
+  e.stopPropagation();
+  document.getElementById('island').classList.toggle('expanded');
+}
+
 function scrollTo(id){
   document.querySelector(id).scrollIntoView({behavior:'smooth'});
   document.querySelectorAll('.island-btn').forEach(function(b){b.classList.remove('on')});
   event.target.classList.add('on');
+  if(window.innerWidth<=768){
+    document.getElementById('island').classList.remove('expanded');
+  }
 }
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
 var btns=document.querySelectorAll('.island-btn');
