@@ -20,28 +20,28 @@ body{
 body::before{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
-    radial-gradient(ellipse 70% 60% at 10% 30%,rgba(255,255,255,.018) 0%,transparent 100%),
-    radial-gradient(ellipse 50% 70% at 90% 80%,rgba(255,255,255,.012) 0%,transparent 100%);
+    radial-gradient(ellipse 55% 55% at 15% 55%,rgba(120,120,132,.028) 0%,transparent 100%),
+    radial-gradient(ellipse 45% 50% at 85% 70%,rgba(120,120,132,.022) 0%,transparent 100%);
 }
 
 /* ISLAND */
 .island{
   position:fixed;top:20px;left:50%;transform:translateX(-50%);
   z-index:300;
-  background:rgba(14,14,14,.88);
-  backdrop-filter:blur(28px) saturate(1.4);
-  -webkit-backdrop-filter:blur(28px) saturate(1.4);
-  border:1px solid rgba(255,255,255,.11);
+  background:rgba(10,10,10,.72);
+  backdrop-filter:blur(40px) saturate(1.8);
+  -webkit-backdrop-filter:blur(40px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.06);
   border-radius:100px;
   padding:0 6px;
   height:48px;
   display:flex;align-items:center;gap:2px;
-  box-shadow:0 2px 32px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);
+  box-shadow:0 8px 32px rgba(0,0,0,.6);will-change:transform;
   white-space:nowrap;
 }
 .island-mark{
-  font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(255,255,255,.88);
+  font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.72);
   padding:0 16px 0 14px;
   border-right:1px solid rgba(255,255,255,.08);
   margin-right:4px;
@@ -277,42 +277,62 @@ body::before{
 .pdesc{font-size:11.5px;font-weight:400;color:rgba(255,255,255,.38);line-height:1.7}
 
 /* NOTES */
-.sh-notes{
-  flex-shrink:0;border-top:1px solid rgba(255,255,255,.06);
-  padding:20px 44px 24px;background:rgba(255,255,255,.02);
+/* NOTE FAB */
+.note-fab{
+  position:absolute;bottom:24px;right:24px;
+  width:42px;height:42px;border-radius:50%;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+  color:rgba(255,255,255,.65);
+  font-size:24px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:10;transition:all .2s;
+  font-family:inherit;box-shadow:0 4px 16px rgba(0,0,0,.4);
+  font-weight:300;
 }
-.sh-notes-lbl{
+.note-fab:hover{background:rgba(255,255,255,.14);color:rgba(255,255,255,.95)}
+.note-fab.has-note{border-color:rgba(255,255,255,.35);color:rgba(255,255,255,.9)}
+.note-popup{
+  position:absolute;bottom:78px;right:24px;
+  width:290px;
+  background:rgba(12,12,12,.97);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:16px;padding:18px;
+  z-index:11;box-shadow:0 16px 48px rgba(0,0,0,.6);
+  display:none;
+}
+.note-popup.on{display:block}
+.note-popup-lbl{
   font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
   color:rgba(255,255,255,.25);margin-bottom:10px;display:block;
 }
-.sh-notes-ta{
-  width:100%;
+.note-popup-ta{
+  width:100%;height:90px;resize:none;
   background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:10px;
+  border:1px solid rgba(255,255,255,.10);border-radius:10px;
   color:rgba(255,255,255,.82);
   font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
-  font-size:12.5px;font-weight:400;line-height:1.6;
-  padding:12px 14px;resize:none;height:72px;outline:none;
-  transition:border-color .2s,background .2s;
+  font-size:12px;font-weight:400;line-height:1.6;
+  padding:10px 12px;outline:none;transition:border-color .2s;
 }
-.sh-notes-ta:focus{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.07)}
-.sh-notes-ta::placeholder{color:rgba(255,255,255,.20)}
-.sh-notes-row{display:flex;align-items:center;gap:10px;margin-top:10px}
-.sh-notes-save{
+.note-popup-ta:focus{border-color:rgba(255,255,255,.22)}
+.note-popup-ta::placeholder{color:rgba(255,255,255,.20)}
+.note-popup-row{display:flex;gap:8px;margin-top:10px;align-items:center}
+.note-popup-save{
   font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
-  color:rgba(255,255,255,.58);background:rgba(255,255,255,.07);
+  color:rgba(255,255,255,.60);background:rgba(255,255,255,.07);
   border:1px solid rgba(255,255,255,.10);border-radius:100px;
-  padding:7px 18px;cursor:pointer;font-family:inherit;transition:all .15s;
+  padding:7px 16px;cursor:pointer;font-family:inherit;transition:all .15s;
 }
-.sh-notes-save:hover{background:rgba(255,255,255,.13);color:rgba(255,255,255,.90)}
-.sh-notes-clear{
-  font-size:10px;font-weight:400;letter-spacing:.06em;
-  color:rgba(255,255,255,.22);background:none;border:none;
-  cursor:pointer;font-family:inherit;padding:7px 4px;transition:color .15s;
+.note-popup-save:hover{background:rgba(255,255,255,.13);color:rgba(255,255,255,.90)}
+.note-popup-clear{
+  font-size:10px;font-weight:400;color:rgba(255,255,255,.22);
+  background:none;border:none;cursor:pointer;font-family:inherit;
+  padding:7px 4px;transition:color .15s;
 }
-.sh-notes-clear:hover{color:rgba(255,255,255,.55)}
-.sh-notes-status{font-size:10px;font-weight:400;color:rgba(255,255,255,.30);margin-left:auto}
+.note-popup-clear:hover{color:rgba(255,255,255,.55)}
+.note-popup-status{font-size:10px;font-weight:400;color:rgba(255,255,255,.28);margin-left:auto}
 .gc-note{
   display:inline-flex;align-items:center;gap:5px;margin-top:12px;
   font-size:9.5px;font-weight:500;letter-spacing:.04em;
@@ -371,9 +391,9 @@ body::before{
 /* APPROVE BUTTON IN ISLAND */
 .island-approve{
   font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
-  color:#000;background:rgba(255,255,255,.88);
-  padding:6px 14px;border-radius:100px;
-  cursor:pointer;transition:background .15s;margin-left:2px;white-space:nowrap;
+  color:#000;background:rgba(255,255,255,.90);
+  padding:7px 16px;border-radius:100px;
+  cursor:pointer;transition:background .15s;margin-left:6px;margin-right:4px;white-space:nowrap;
   border:none;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
 }
 .island-approve:hover{background:#fff}
@@ -412,7 +432,11 @@ body::before{
 }
 .approve-confirm:hover{background:#fff}
 
-/* MASTER SEND BUTTON */
+/* SECTION NOTE */
+.section-note{
+  font-size:12px;font-weight:400;color:rgba(255,255,255,.28);
+  margin-bottom:24px;line-height:1.7;max-width:600px;
+}
 .master-btn{
   position:fixed;bottom:32px;right:32px;z-index:150;
   background:rgba(255,255,255,.92);color:#000;
@@ -519,7 +543,7 @@ body::before{
     overflow:hidden;
   }
   .island-mobile-lbl{display:flex}
-  .island-mark,.island-nav,.island-sep,.island-client{display:none}
+  .island-mark,.island-nav,.island-sep,.island-approve{display:none}
 
   /* ISLAND : expanded */
   .island.expanded{
@@ -532,12 +556,9 @@ body::before{
   }
   .island.expanded .island-mobile-lbl{display:flex;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08);width:100%;justify-content:center}
   .island.expanded .island-nav{display:flex;flex-direction:column;width:100%;gap:2px}
-  .island.expanded .island-mark{display:none}
-  .island.expanded .island-sep{display:none}
-  .island.expanded .island-client{display:none}
   .island.expanded .island-btn{text-align:center;padding:10px 16px;font-size:12px;width:100%;border-radius:12px}
   .island-approve{display:none}
-  .island.expanded .island-approve{display:block;width:100%;text-align:center;padding:10px;border-radius:12px;margin-top:4px}
+  .island.expanded .island-approve{display:block;width:100%;text-align:center;padding:10px;border-radius:12px;margin-left:0;margin-top:4px;color:#000;background:rgba(255,255,255,.90)}
   .welcome{padding:36px 28px;border-radius:20px}
   .welcome-title{font-size:20px}
   .welcome-p{font-size:12px}
@@ -578,10 +599,6 @@ body::before{
     grid-template-columns:1fr;
     gap:20px;
   }
-  .sh-notes{padding:14px 20px 20px}
-  .sh-notes-ta{height:80px}
-  .sh-notes-row{flex-wrap:wrap;gap:8px}
-
   /* FLOATING BUTTONS */
   .master-btn{
     bottom:20px;right:16px;
@@ -600,15 +617,13 @@ body::before{
 <!-- ISLAND -->
 <div class="island" id="island" onclick="toggleIsland(event)">
   <span class="island-mobile-lbl">Bird Eye x Ardent</span>
-  <span class="island-mark">Ardent</span>
+  <span class="island-mark">Ardent x Bird Eye</span>
   <nav class="island-nav">
-    <button class="island-btn on" onclick="scrollTo('#pages')">Pages</button>
-    <button class="island-btn" onclick="scrollTo('#apps')">Apps</button>
-    <button class="island-btn" onclick="scrollTo('#promos')">Promotions</button>
+    <button class="island-btn on" onclick="navTo(event,'#pages')">Pages</button>
+    <button class="island-btn" onclick="navTo(event,'#apps')">Apps</button>
+    <button class="island-btn" onclick="navTo(event,'#promos')">Promotions</button>
   </nav>
-  <span class="island-sep"></span>
-  <span class="island-client">Bird Eye</span>
-  <button class="island-approve" onclick="showApprove()">Approve</button>
+  <button class="island-approve" onclick="showApprove(event)">Approve</button>
 </div>
 
 <!-- HERO -->
@@ -632,6 +647,7 @@ body::before{
     <span class="section-lbl">App Stack</span>
     <div class="section-line"></div>
   </div>
+  <p class="section-note">The apps below were referenced in your brief. Our development team will review and confirm the best options during the build.</p>
   <div class="agrid" id="appsGrid"></div>
 </section>
 
@@ -716,15 +732,16 @@ body::before{
     <div class="sh-close" onclick="closeSheet()">&#x2715;</div>
   </div>
   <div class="sh-body" id="shBody"></div>
-  <div class="sh-notes">
-    <span class="sh-notes-lbl">Note</span>
-    <textarea class="sh-notes-ta" id="shNotesTa" placeholder="Add a note for this page..."></textarea>
-    <div class="sh-notes-row">
-      <button class="sh-notes-save" onclick="saveNote()">Save</button>
-      <button class="sh-notes-clear" onclick="clearNote()">Clear</button>
-      <span class="sh-notes-status" id="shNotesStatus"></span>
+  <div class="note-popup" id="notePopup">
+    <span class="note-popup-lbl">Note</span>
+    <textarea class="note-popup-ta" id="shNotesTa" placeholder="Add a note for this page..."></textarea>
+    <div class="note-popup-row">
+      <button class="note-popup-save" onclick="saveNote()">Save</button>
+      <button class="note-popup-clear" onclick="clearNote()">Clear</button>
+      <span class="note-popup-status" id="shNotesStatus"></span>
     </div>
   </div>
+  <button class="note-fab" id="noteFab" onclick="toggleNotePopup()">+</button>
 </div>
 
 <script>
@@ -903,11 +920,17 @@ function openSheet(idx){
   var saved=localStorage.getItem('be_note_'+idx)||'';
   document.getElementById('shNotesTa').value=saved;
   document.getElementById('shNotesStatus').textContent=saved?'Note saved':'';
+  document.getElementById('notePopup').classList.remove('on');
+  var fab=document.getElementById('noteFab');
+  if(fab)fab.classList.toggle('has-note',!!saved);
   document.getElementById('sheet').classList.add('on');
   document.getElementById('overlay').classList.add('on');
   document.body.style.overflow='hidden';
 }
 
+function toggleNotePopup(){
+  document.getElementById('notePopup').classList.toggle('on');
+}
 function saveNote(){
   var note=document.getElementById('shNotesTa').value.trim();
   if(note){localStorage.setItem('be_note_'+currentIdx,note);}
@@ -989,6 +1012,8 @@ function updateBadge(idx){
   } else if(!note&&existing){
     existing.remove();
   }
+  var fab=document.getElementById('noteFab');
+  if(fab&&idx===currentIdx)fab.classList.toggle('has-note',!!note);
 }
 
 function loadBadges(){
@@ -998,6 +1023,7 @@ loadBadges();
 function closeSheet(){
   document.getElementById('sheet').classList.remove('on');
   document.getElementById('overlay').classList.remove('on');
+  document.getElementById('notePopup').classList.remove('on');
   document.body.style.overflow='';
 }
 // Welcome modal
@@ -1010,9 +1036,19 @@ function dismissWelcome(){
   document.getElementById('welcomeWrap').classList.remove('on');
 }
 
-// Approve
-function showApprove(){
+function showApprove(e){
+  if(e)e.stopPropagation();
   document.getElementById('approveWrap').classList.add('on');
+}
+
+function navTo(e,id){
+  e.stopPropagation();
+  document.querySelector(id).scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('.island-btn').forEach(function(b){b.classList.remove('on')});
+  e.target.classList.add('on');
+  if(window.innerWidth<=768){
+    document.getElementById('island').classList.remove('expanded');
+  }
 }
 function closeApprove(){
   document.getElementById('approveWrap').classList.remove('on');
@@ -1030,14 +1066,6 @@ function toggleIsland(e){
   document.getElementById('island').classList.toggle('expanded');
 }
 
-function scrollTo(id){
-  document.querySelector(id).scrollIntoView({behavior:'smooth'});
-  document.querySelectorAll('.island-btn').forEach(function(b){b.classList.remove('on')});
-  event.target.classList.add('on');
-  if(window.innerWidth<=768){
-    document.getElementById('island').classList.remove('expanded');
-  }
-}
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
 var btns=document.querySelectorAll('.island-btn');
 var secs=['#pages','#apps','#promos'];
