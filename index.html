@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bird Eye: Website Build Brief</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-weight:400;
+  background:#080808;
+  color:rgba(255,255,255,.90);
+  font-size:14px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 60% at 10% 30%,rgba(255,255,255,.018) 0%,transparent 100%),
+    radial-gradient(ellipse 50% 70% at 90% 80%,rgba(255,255,255,.012) 0%,transparent 100%);
+}
+
+/* ISLAND */
+.island{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);
+  z-index:300;
+  background:rgba(14,14,14,.88);
+  backdrop-filter:blur(28px) saturate(1.4);
+  -webkit-backdrop-filter:blur(28px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:100px;
+  padding:0 6px;
+  height:48px;
+  display:flex;align-items:center;gap:2px;
+  box-shadow:0 2px 32px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);
+  white-space:nowrap;
+}
+.island-mark{
+  font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.88);
+  padding:0 16px 0 14px;
+  border-right:1px solid rgba(255,255,255,.08);
+  margin-right:4px;
+}
+.island-nav{display:flex;align-items:center;gap:2px}
+.island-btn{
+  font-size:11px;font-weight:400;letter-spacing:.02em;
+  color:rgba(255,255,255,.45);
+  padding:7px 14px;border-radius:100px;
+  cursor:pointer;transition:all .2s;border:none;background:none;
+  font-family:inherit;
+}
+.island-btn:hover,.island-btn.on{
+  color:rgba(255,255,255,.92);
+  background:rgba(255,255,255,.09);
+}
+.island-sep{width:1px;height:14px;background:rgba(255,255,255,.07);margin:0 4px}
+.island-client{
+  font-size:10px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.30);
+  padding:0 14px 0 6px;margin-left:4px;
+  border-left:1px solid rgba(255,255,255,.08);
+}
+
+/* HERO */
+.hero{
+  padding:140px 72px 80px;
+  position:relative;z-index:1;
+}
+.hero-name{
+  font-size:clamp(52px,9vw,96px);
+  font-weight:300;
+  color:rgba(255,255,255,.92);
+  letter-spacing:-.04em;
+  line-height:1;
+  margin-bottom:14px;
+}
+.hero-sub{
+  font-size:15px;font-weight:300;
+  color:rgba(255,255,255,.32);
+  letter-spacing:.03em;
+}
+
+/* SECTIONS */
+.section{max-width:1200px;margin:0 auto;padding:80px 52px;position:relative;z-index:1}
+.section-hdr{
+  display:flex;align-items:baseline;gap:12px;
+  margin-bottom:36px;
+}
+.section-lbl{
+  font-size:9px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);
+}
+.section-line{flex:1;height:1px;background:rgba(255,255,255,.06);margin-left:8px}
+
+/* PAGE GRID */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+
+/* GLASS CARD */
+.gc{
+  background:rgba(255,255,255,.048);
+  backdrop-filter:blur(20px) saturate(1.2);
+  -webkit-backdrop-filter:blur(20px) saturate(1.2);
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:20px;padding:30px 26px 24px;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:background .25s,border-color .25s,transform .25s,box-shadow .25s;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+}
+.gc:hover{
+  background:rgba(255,255,255,.08);
+  border-color:rgba(255,255,255,.16);
+  transform:translateY(-4px);
+  box-shadow:0 20px 48px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1);
+}
+.gc:hover .gc-cta{opacity:1;transform:translateX(0)}
+.gc-title{font-size:20px;font-weight:500;color:rgba(255,255,255,.92);letter-spacing:-.02em;margin-bottom:6px;line-height:1.2}
+.gc-desc{font-size:13px;font-weight:400;color:rgba(255,255,255,.38);margin-bottom:20px;letter-spacing:.01em}
+.gc-list{list-style:none;margin-bottom:16px}
+.gc-list li{
+  font-size:12px;font-weight:400;color:rgba(255,255,255,.52);
+  padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);
+  display:flex;align-items:center;gap:8px;line-height:1.45;
+}
+.gc-list li::before{content:'';width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.22);flex-shrink:0}
+.gc-more{font-size:10px;font-weight:400;color:rgba(255,255,255,.25);margin-bottom:18px;font-style:italic;letter-spacing:.02em}
+.gc-flags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:18px}
+.gc-flag{
+  font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(255,255,255,.38);
+  border:1px solid rgba(255,255,255,.12);
+  padding:3px 8px;border-radius:100px;
+}
+.gc-flag.solid{background:rgba(255,255,255,.90);color:#000;border-color:transparent}
+.gc-cta{
+  font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.58);display:flex;align-items:center;gap:5px;
+  opacity:0;transform:translateX(-5px);transition:opacity .2s,transform .2s;
+}
+
+/* BOTTOM SHEET */
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.overlay.on{opacity:1;pointer-events:all}
+.sheet{
+  position:fixed;bottom:0;left:0;right:0;height:74vh;
+  background:rgba(12,12,12,.96);
+  backdrop-filter:blur(32px) saturate(1.4);
+  -webkit-backdrop-filter:blur(32px) saturate(1.4);
+  border-top:1px solid rgba(255,255,255,.12);
+  border-radius:24px 24px 0 0;
+  box-shadow:0 -20px 60px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08);
+  z-index:201;transform:translateY(100%);
+  transition:transform .38s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+}
+.sheet.on{transform:translateY(0)}
+.sh-handle{
+  width:40px;height:4px;border-radius:100px;
+  background:rgba(255,255,255,.18);
+  margin:14px auto 0;flex-shrink:0;
+}
+.sh-hdr{
+  padding:22px 44px 18px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;flex-shrink:0;gap:20px;
+}
+.sh-n{
+  font-size:12px;font-weight:400;color:rgba(255,255,255,.25);
+  letter-spacing:.06em;font-variant-numeric:tabular-nums;
+  padding-right:20px;border-right:1px solid rgba(255,255,255,.08);
+}
+.sh-info{flex:1}
+.sh-title{font-size:20px;font-weight:400;color:rgba(255,255,255,.92);letter-spacing:-.01em}
+.sh-desc{font-size:11px;font-weight:400;color:rgba(255,255,255,.32);margin-top:3px}
+.sh-close{
+  width:32px;height:32px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:13px;color:rgba(255,255,255,.48);
+  transition:all .15s;flex-shrink:0;
+}
+.sh-close:hover{background:rgba(255,255,255,.14);color:rgba(255,255,255,.92)}
+.sh-body{
+  flex:1;overflow-y:auto;padding:32px 44px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:32px 40px;align-content:start;
+}
+.sh-body::-webkit-scrollbar{width:3px}
+.sh-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.10);border-radius:2px}
+.ssec-t{
+  font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);margin-bottom:12px;padding-bottom:8px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.ssec-ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.ssec-ul li{
+  font-size:12px;font-weight:400;color:rgba(255,255,255,.58);
+  display:flex;align-items:flex-start;gap:8px;line-height:1.6;
+}
+.ssec-ul li::before{content:'';width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.20);flex-shrink:0;margin-top:7px}
+.li-tag{
+  font-size:8.5px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,.12);padding:2px 6px;border-radius:100px;
+  color:rgba(255,255,255,.38);white-space:nowrap;flex-shrink:0;
+}
+.li-tag.solid{background:rgba(255,255,255,.88);color:#000;border-color:transparent}
+
+/* APP GRID */
+.agrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.atile{
+  background:rgba(255,255,255,.042);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:20px 18px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+  transition:background .2s,border-color .2s;
+}
+.atile:hover{background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.14)}
+.atile-n{font-size:12.5px;font-weight:500;color:rgba(255,255,255,.85);margin-bottom:5px}
+.atile-r{font-size:10.5px;font-weight:400;color:rgba(255,255,255,.35);line-height:1.5}
+
+/* PROMO GRID */
+.pgrd{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pcrd{
+  background:rgba(255,255,255,.042);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:22px 22px;
+  position:relative;overflow:hidden;
+  transition:background .2s,border-color .2s;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+}
+.pcrd:hover{background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.14)}
+.pcrd.ft{border-top:1px solid rgba(255,255,255,.25)}
+.pcrd-bg{
+  position:absolute;right:8px;bottom:-14px;
+  font-size:58px;font-weight:200;color:rgba(255,255,255,.04);
+  line-height:1;letter-spacing:-.04em;pointer-events:none;
+  font-variant-numeric:tabular-nums;
+}
+.pcrd-code{
+  font-family:'Courier New',monospace;font-size:13px;font-weight:500;
+  color:rgba(255,255,255,.82);letter-spacing:.04em;margin-bottom:8px;
+}
+.pcrd-desc{font-size:11.5px;font-weight:400;color:rgba(255,255,255,.36);line-height:1.55}
+
+/* PENDING */
+.pendlist{display:flex;flex-direction:column;gap:10px}
+.pitem{
+  background:rgba(255,255,255,.042);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:22px 26px;
+  display:flex;gap:20px;align-items:flex-start;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+}
+.pnum{
+  font-size:10px;font-weight:400;color:rgba(255,255,255,.22);
+  width:16px;flex-shrink:0;margin-top:4px;
+  font-variant-numeric:tabular-nums;letter-spacing:.04em;
+}
+.ptitle{font-size:13px;font-weight:500;color:rgba(255,255,255,.85);margin-bottom:5px}
+.pdesc{font-size:11.5px;font-weight:400;color:rgba(255,255,255,.38);line-height:1.7}
+
+/* NOTES */
+.sh-notes{
+  flex-shrink:0;border-top:1px solid rgba(255,255,255,.06);
+  padding:20px 44px 24px;background:rgba(255,255,255,.02);
+}
+.sh-notes-lbl{
+  font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);margin-bottom:10px;display:block;
+}
+.sh-notes-ta{
+  width:100%;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:10px;
+  color:rgba(255,255,255,.82);
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-size:12.5px;font-weight:400;line-height:1.6;
+  padding:12px 14px;resize:none;height:72px;outline:none;
+  transition:border-color .2s,background .2s;
+}
+.sh-notes-ta:focus{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.07)}
+.sh-notes-ta::placeholder{color:rgba(255,255,255,.20)}
+.sh-notes-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+.sh-notes-save{
+  font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.58);background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.10);border-radius:100px;
+  padding:7px 18px;cursor:pointer;font-family:inherit;transition:all .15s;
+}
+.sh-notes-save:hover{background:rgba(255,255,255,.13);color:rgba(255,255,255,.90)}
+.sh-notes-clear{
+  font-size:10px;font-weight:400;letter-spacing:.06em;
+  color:rgba(255,255,255,.22);background:none;border:none;
+  cursor:pointer;font-family:inherit;padding:7px 4px;transition:color .15s;
+}
+.sh-notes-clear:hover{color:rgba(255,255,255,.55)}
+.sh-notes-status{font-size:10px;font-weight:400;color:rgba(255,255,255,.30);margin-left:auto}
+.gc-note{
+  display:inline-flex;align-items:center;gap:5px;margin-top:12px;
+  font-size:9.5px;font-weight:500;letter-spacing:.04em;
+  color:rgba(255,255,255,.40);border:1px solid rgba(255,255,255,.10);
+  border-radius:100px;padding:3px 10px;
+}
+.gc-note-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.50);flex-shrink:0}
+
+/* MASTER SEND BUTTON */
+.master-btn{
+  position:fixed;bottom:32px;right:32px;z-index:150;
+  background:rgba(255,255,255,.92);color:#000;
+  font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  border:none;border-radius:100px;padding:14px 22px;
+  cursor:pointer;
+  box-shadow:0 8px 32px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3);
+  transition:all .2s;display:flex;align-items:center;gap:8px;
+}
+.master-btn:hover{background:#fff;transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.6)}
+.master-btn-dot{width:6px;height:6px;border-radius:50%;background:#000}
+
+/* SEND MODAL */
+.modal-wrap{
+  position:fixed;inset:0;z-index:400;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modal-wrap.on{opacity:1;pointer-events:all}
+.modal{
+  background:rgba(16,16,16,.97);
+  backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;padding:36px 40px;
+  max-width:420px;width:90%;
+  box-shadow:0 32px 80px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08);
+}
+.modal-title{font-size:17px;font-weight:500;color:rgba(255,255,255,.92);margin-bottom:10px;letter-spacing:-.01em}
+.modal-body{font-size:12.5px;font-weight:400;color:rgba(255,255,255,.40);line-height:1.75;margin-bottom:28px}
+.modal-none{font-size:12.5px;font-weight:400;color:rgba(255,255,255,.35);margin-bottom:28px;font-style:italic}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.modal-cancel{
+  font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.38);background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);border-radius:100px;
+  padding:9px 20px;cursor:pointer;font-family:inherit;transition:all .15s;
+}
+.modal-cancel:hover{color:rgba(255,255,255,.70);background:rgba(255,255,255,.10)}
+.modal-confirm{
+  font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#000;background:rgba(255,255,255,.92);
+  border:1px solid transparent;border-radius:100px;
+  padding:9px 20px;cursor:pointer;font-family:inherit;transition:all .15s;
+}
+.modal-confirm:hover{background:#fff}
+
+/* IMPORT PANEL */
+.import-wrap{
+  position:fixed;bottom:32px;left:32px;z-index:150;
+}
+.import-btn{
+  font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  color:rgba(255,255,255,.35);
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.09);border-radius:100px;
+  padding:10px 18px;cursor:pointer;transition:all .2s;
+}
+.import-btn:hover{color:rgba(255,255,255,.70);background:rgba(255,255,255,.09)}
+.import-box{
+  background:rgba(14,14,14,.97);
+  border:1px solid rgba(255,255,255,.12);border-radius:16px;
+  padding:20px;margin-bottom:8px;width:280px;
+  box-shadow:0 16px 48px rgba(0,0,0,.6);
+  display:none;
+}
+.import-box.on{display:block}
+.import-box-lbl{font-size:9px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:8px;display:block}
+.import-ta{
+  width:100%;height:80px;resize:none;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);
+  border-radius:8px;color:rgba(255,255,255,.75);
+  font-family:'Courier New',monospace;font-size:10px;
+  padding:8px 10px;outline:none;
+}
+.import-go{
+  margin-top:8px;font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  color:#000;background:rgba(255,255,255,.90);border:none;border-radius:100px;
+  padding:7px 16px;cursor:pointer;font-family:inherit;width:100%;
+}
+
+/* FOOTER */
+.footer{
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:36px 52px;
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:40px;position:relative;z-index:1;
+}
+.footer-l{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.28)}
+.footer-r{font-size:10px;font-weight:400;color:rgba(255,255,255,.18);letter-spacing:.04em}
+
+@media(max-width:960px){
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+  .agrid{grid-template-columns:repeat(3,1fr)}
+  .pgrd{grid-template-columns:repeat(2,1fr)}
+  .section{padding:64px 28px}
+  .island{max-width:calc(100vw - 32px)}
+}
+@media(max-width:640px){
+  .pgrid,.agrid,.pgrd{grid-template-columns:1fr}
+  .hero{padding:0 32px}
+  .hero-name{font-size:clamp(56px,16vw,80px)}
+  .island-btn{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ISLAND -->
+<div class="island">
+  <span class="island-mark">Ardent</span>
+  <nav class="island-nav">
+    <button class="island-btn on" onclick="scrollTo('#pages')">Pages</button>
+    <button class="island-btn" onclick="scrollTo('#apps')">Apps</button>
+    <button class="island-btn" onclick="scrollTo('#promos')">Promotions</button>
+  </nav>
+  <span class="island-sep"></span>
+  <span class="island-client">Bird Eye</span>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-name">Bird Eye</div>
+  <div class="hero-sub">x Ardent: Website</div>
+</section>
+
+<!-- PAGES -->
+<section class="section" id="pages">
+  <div class="section-hdr">
+    <span class="section-lbl">Pages</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="pgrid" id="pageGrid"></div>
+</section>
+
+<!-- APPS -->
+<section class="section" id="apps">
+  <div class="section-hdr">
+    <span class="section-lbl">App Stack</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="agrid" id="appsGrid"></div>
+</section>
+
+<!-- PROMOS -->
+<section class="section" id="promos">
+  <div class="section-hdr">
+    <span class="section-lbl">Promotions and Discounts</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="pgrd" id="promoGrid"></div>
+</section>
+
+
+<footer class="footer">
+  <span class="footer-l">Ardent</span>
+  <span class="footer-r">Prepared for Bird Eye &nbsp;&middot;&nbsp; June 2026</span>
+</footer>
+
+<!-- MASTER SEND -->
+<button class="master-btn" onclick="showSendModal()">
+  <span class="master-btn-dot"></span>Send to Ardent
+</button>
+
+<!-- IMPORT (for Ardent) -->
+<div class="import-wrap">
+  <div class="import-box" id="importBox">
+    <span class="import-box-lbl">Paste notes JSON to import</span>
+    <textarea class="import-ta" id="importTa" placeholder='[{"page":"Home","note":"..."}]'></textarea>
+    <button class="import-go" onclick="importNotes()">Import Notes</button>
+  </div>
+  <button class="import-btn" onclick="toggleImport()">Import Notes</button>
+</div>
+
+<!-- SEND MODAL -->
+<div class="modal-wrap" id="sendModal">
+  <div class="modal">
+    <div class="modal-title">Send to Ardent</div>
+    <div class="modal-body" id="modalBody">All saved notes will be compiled and sent to Ardent for review. Please allow 30 minutes before submitting a new note.</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeSendModal()">Cancel</button>
+      <button class="modal-confirm" id="modalConfirm" onclick="confirmSend()">Send Notes</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet">
+  <div class="sh-handle"></div>
+  <div class="sh-hdr">
+    <span class="sh-n" id="shN"></span>
+    <div class="sh-info">
+      <div class="sh-title" id="shTitle"></div>
+      <div class="sh-desc" id="shDesc"></div>
+    </div>
+    <div class="sh-close" onclick="closeSheet()">&#x2715;</div>
+  </div>
+  <div class="sh-body" id="shBody"></div>
+  <div class="sh-notes">
+    <span class="sh-notes-lbl">Note</span>
+    <textarea class="sh-notes-ta" id="shNotesTa" placeholder="Add a note for this page..."></textarea>
+    <div class="sh-notes-row">
+      <button class="sh-notes-save" onclick="saveNote()">Save</button>
+      <button class="sh-notes-clear" onclick="clearNote()">Clear</button>
+      <span class="sh-notes-status" id="shNotesStatus"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+var PAGES=[
+  {n:1,title:"Home",desc:"Main landing page",flags:[],
+   prev:["Hero video or static image","Bestsellers section","Collections grid","Celebrity and influencer spotting","Customer UGC and testimonials"],more:12,
+   secs:[
+    {t:"Top Bar",li:[{v:"Scrolling announcement bar, updated regularly by client"}]},
+    {t:"Hero",li:[{v:"Full-width video or static image, swappable"},{v:"Multiple slides and videos in sequence"},{v:"Lifestyle and outdoor photoshoot imagery"}]},
+    {t:"Subscribe Popup",li:[{v:"Email capture on first visit",a:"SendWill"},{v:"Image changeable by client"}]},
+    {t:"Homepage Sections",li:[
+      {v:"Bestsellers section with product grid"},{v:"Collections grid: Tops, Bottoms, Matching Sets, Shop by Activity"},
+      {v:"Shop by Activity: Yoga, Running, Gym, Pilates, Court"},{v:"Matching Sets highlight section"},
+      {v:"Compare Products teaser and CTA"},{v:"Brand story and vision text block"},
+      {v:"3D and 2D render graphics"},{v:"BTS images"},
+      {v:"Celebrity and influencer spotting grid",x:"Asset"},{v:"PR magazine logo strip",x:"Asset"},
+      {v:"Customer UGC images and reels",x:"Asset"},{v:"Testimonials"},
+      {v:"Instagram feed",a:"Vitals"},{v:"Shipping and product info graphics"},
+      {v:"Recent blog posts from Bird Eye Journal"},{v:"FAQs section"}
+    ]},
+    {t:"Footer",li:[
+      {v:"FAQs"},{v:"Job opportunities"},{v:"Influencer inquiry"},{v:"Affiliate and loyalty program"},
+      {v:"Gift card"},{v:"Track your order"},{v:"Policy links: Privacy, Terms, Shipping, Refund"},{v:"Contact info"}
+    ]}
+   ]},
+  {n:2,title:"Shop All",desc:"Full product catalogue",flags:[],
+   prev:["Full product grid","Filters: colour, size, activity","Sort: newest, bestselling, price"],
+   secs:[{t:"Features",li:[{v:"Full product grid"},{v:"Filters: colour, size, activity, collection"},{v:"Sort: newest, bestselling, price"}]}]},
+  {n:3,title:"New Collections",desc:"Latest arrivals",flags:[],
+   prev:["New arrivals product grid","Filters and sort options"],
+   secs:[{t:"Features",li:[{v:"New arrivals product grid"},{v:"Filters and sort options"}]}]},
+  {n:4,title:"Tops",desc:"3 sub-categories",flags:[],
+   prev:["All Tops","Sports Bras","Jackets and Tees"],
+   secs:[{t:"Sub-pages",li:[{v:"All Tops"},{v:"Sports Bras"},{v:"Jackets and Tees"}]},{t:"Each Sub-page",li:[{v:"Product grid"},{v:"Colour and size filters"},{v:"Sort options"}]}]},
+  {n:5,title:"Bottoms",desc:"3 sub-categories",flags:[],
+   prev:["All Bottoms","Leggings","Shorts and Skirts"],
+   secs:[{t:"Sub-pages",li:[{v:"All Bottoms"},{v:"Leggings"},{v:"Shorts and Skirts"}]},{t:"Each Sub-page",li:[{v:"Product grid"},{v:"Colour and size filters"},{v:"Sort options"}]}]},
+  {n:6,title:"Matching Sets",desc:"All matching combinations",flags:[],
+   prev:["All combinations displayed","Filter by colour, style, activity","Links directly to each set"],
+   secs:[{t:"Features",li:[{v:"All matching set combinations displayed together"},{v:"Filter by colour, style, activity"},{v:"Links directly to each combination"}]}]},
+  {n:7,title:"Shop by Activity",desc:"5 activity sub-pages",flags:[],
+   prev:["Yoga","Running","Gym","Pilates","Court"],
+   secs:[{t:"Sub-pages",li:[{v:"Yoga"},{v:"Running"},{v:"Gym"},{v:"Pilates"},{v:"Court"}]},{t:"Each Sub-page",li:[{v:"Filtered product grid for that activity"},{v:"Relevant filters and sort options"}]}]},
+  {n:8,title:"Shop by Colour",desc:"Colour-based product browse",flags:[],
+   prev:["Colour swatch grid","Tap to browse all products in that colour"],
+   secs:[{t:"Features",li:[{v:"Colour swatch grid"},{v:"Tap a swatch to browse all products in that colour"},{v:"Product grid filtered by selected colour"}]}]},
+  {n:9,title:"Compare Products",desc:"Dynamic side-by-side comparison",flags:["Custom Build"],
+   prev:["Select 2 to 3 products","Side-by-side comparison table","Fit, material, compression, sizes, activity"],
+   secs:[
+    {t:"How It Works",li:[{v:"Select 2 to 3 products in the same category"},{v:"Side-by-side comparison. Reference: Apple iPhone compare."},{v:"Table pulls live data from product metafields"}]},
+    {t:"Attributes Compared",li:[{v:"Fit"},{v:"Material"},{v:"Compression level"},{v:"Available colours"},{v:"Available sizes"},{v:"Suited for activity"}]},
+    {t:"Before Build Can Start",li:[{v:"All products need fit, material, compression, and activity data entered as metafields. Data entry task. Start early."}]}
+   ]},
+  {n:10,title:"Product Page",desc:"Template applied to every product",flags:["Custom Build"],
+   prev:["Multiple product shots with zoom","Sticky Add to Cart","Match and Go","Complete the Look","AI Fit recommender"],more:14,
+   secs:[
+    {t:"Images",li:[{v:"Front, back, left, right, and close-up feature shots"},{v:"Graphic feature images with callout text overlaid"},{v:"Zoom on hover and tap"},{v:"All images resized and optimised"},{v:"Influencer and customer UGC",x:"Asset"},{v:"AI-generated fabric videos"}]},
+    {t:"Product Info",li:[{v:"All colours grouped under one listing"},{v:"Colour order reviewed and updated"},{v:"Icons near Add to Cart and Buy Now"},{v:"Sticky Add to Cart"},{v:"Stock scarcity indicator",a:"Vitals"},{v:"Coupon codes visible on page"},{v:"Recent purchases display"}]},
+    {t:"Description Sections",li:[{v:"What's new and exciting"},{v:"What makes it so good"},{v:"Reasons to adore it"},{v:"Fit information"},{v:"Wash care and info"},{v:"What it's made of"}]},
+    {t:"Size and Fit",li:[{v:"Size chart: updated measurements, images, expanded info",a:"Kiwi"},{v:"AI Fit recommender: size from height, weight, fit preference",a:"Kiwi"},{v:"Notify Me When Available",a:"Vitals"}]},
+    {t:"Discovery and Upsell",li:[{v:"Complete the Look: colour-aware outfit suggestions",d:true},{v:"Match and Go: links directly to matching product by colour",d:true},{v:"Outfit inspiration section"},{v:"You may also like"},{v:"Featured collection"},{v:"Recently viewed"}]},
+    {t:"Fabric and Quality",li:[{v:"Fabric quality and tech info block"},{v:"Graphic quality and feature icons"}]},
+    {t:"Delivery and Returns",li:[{v:"Delivery timeline and pincode checker"},{v:"Shipping info"},{v:"Exchange and return policy summary"}]},
+    {t:"Reviews",li:[{v:"Product reviews with images",a:"Vitals"},{v:"More reviews across all products"},{v:"Reviews from Instagram and customer testimonials"}]}
+   ]},
+  {n:11,title:"Cart",desc:"Upsell and offers at checkout",flags:[],
+   prev:["You may also like","Recommended products","Offers and coupon codes","Progress bar to next reward"],
+   secs:[{t:"Features",li:[{v:"You may also like"},{v:"Recommended products"},{v:"Active offers and coupon codes"},{v:"Note from the brand"},{v:"Progress bar toward next reward",a:"Kite"}]}]},
+  {n:12,title:"Fabric Guide",desc:"Fabric technology and materials",flags:["Needs Assets"],
+   prev:["Fabric names and descriptions","Fabric technology icons","AI fabric images","Materials across the range"],
+   secs:[{t:"Content",li:[{v:"Fabric names and descriptions"},{v:"Logo guide: fabric technology icons"},{v:"AI-generated fabric images"},{v:"Fabrics used across the product range"}]},{t:"Visual References",li:[{v:"Lululemon fabric guide"},{v:"Alo Yoga fabrication guide"}]}]},
+  {n:13,title:"Blog / Journal",desc:"Bird Eye Journal editorial hub",flags:[],
+   prev:["Article listing page","Individual article pages","Categories and tags"],
+   secs:[{t:"Features",li:[{v:"Article listing page"},{v:"Individual article pages"},{v:"Categories and tags"}]}]},
+  {n:14,title:"Celebrity and Influencer",desc:"Dedicated content grid",flags:["Needs Assets"],
+   prev:["Grid of celebrity and influencer content","Reels and photos","Also teased on homepage"],
+   secs:[{t:"Features",li:[{v:"Grid of celebrity and influencer images and videos"},{v:"Reels and photos of public figures wearing Bird Eye"},{v:"Also teased on homepage in a highlights section"}]}]},
+  {n:15,title:"PR Articles",desc:"Press and magazine features",flags:["Needs Assets"],
+   prev:["Press mentions and article links","Magazine logos and features"],
+   secs:[{t:"Content",li:[{v:"Press mentions and PR article links and logos"},{v:"Magazine features"}]}]},
+  {n:16,title:"Community Events",desc:"Events calendar and community content",flags:["Needs Assets"],
+   prev:["Upcoming events listing","Past events and recaps","Community content"],
+   secs:[{t:"Features",li:[{v:"Upcoming events listing"},{v:"Past events and recaps"},{v:"Community content"}]}]},
+  {n:17,title:"About Us",desc:"Brand story and vision",flags:[],
+   prev:["Brand story","Vision and mission","Lifestyle imagery"],
+   secs:[{t:"Content",li:[{v:"Brand story"},{v:"Vision and mission"},{v:"Lifestyle imagery"}]}]},
+  {n:18,title:"Exchanges and Returns",desc:"Powered by Return Prime",flags:[],
+   prev:["Return Prime portal","Policy details","Step-by-step guide"],
+   secs:[{t:"Features",li:[{v:"Return Prime portal integration",a:"Return Prime"},{v:"Policy details: eligibility and timeframes"},{v:"Step-by-step guide to initiating a return or exchange"}]}]},
+  {n:19,title:"Contact Us",desc:"Contact form and WhatsApp",flags:[],
+   prev:["Contact form","WhatsApp chat button","Email and social links"],
+   secs:[{t:"Features",li:[{v:"Contact form"},{v:"WhatsApp chat button, site-wide",a:"BiteSpeed"},{v:"Email address and social links"}]}]},
+  {n:20,title:"Track Your Order",desc:"Order status lookup",flags:[],
+   prev:["Enter order number or email","Live delivery status"],
+   secs:[{t:"Features",li:[{v:"Enter order number or email to check delivery status"},{v:"Live delivery status"}]}]},
+  {n:21,title:"Policy Pages",desc:"4 standard pages",flags:[],
+   prev:["Privacy Policy","Terms of Service","Shipping Policy","Refund Policy"],
+   secs:[{t:"Pages",li:[{v:"Privacy Policy"},{v:"Terms of Service"},{v:"Shipping Policy"},{v:"Refund Policy"}]}]}
+];
+var APPS=[
+  {n:"Return Prime",r:"Returns and exchanges"},
+  {n:"Vitals",r:"Reviews, Instagram feed, back-in-stock, stock scarcity"},
+  {n:"BiteSpeed",r:"WhatsApp API, support inbox, automations"},
+  {n:"PageFly",r:"Custom page layouts"},
+  {n:"Kiwi",r:"AI-powered size chart and fit recommender"},
+  {n:"SendWill",r:"Subscribe popups and email capture"},
+  {n:"Klaviyo",r:"Email and SMS marketing"},
+  {n:"Smile",r:"Loyalty rewards and referrals"},
+  {n:"Kite",r:"Gift with purchase, bundle discounts, cart progress bar"},
+  {n:"Cherry",r:"Cashback marketing"}
+];
+var PROMOS=[
+  {c:"BIRDEYE10",d:"10% off on first order",f:true},
+  {c:"Subscribe",d:"10% off for new email subscribers",f:false},
+  {c:"Free Tote",d:"Auto-added on orders over Rs 4,000 to 5,000",f:true},
+  {c:"15% Over 5K",d:"15% off all orders over Rs 5,000",f:false},
+  {c:"FLAT500",d:"Rs 500 flat off orders over a set threshold",f:true},
+  {c:"Buy 2 Items",d:"15% off when buying 2 or more items",f:false},
+  {c:"Bundle: 2",d:"10% off when bundling 2 items",f:false},
+  {c:"Bundle: 3",d:"15% off when bundling 3 items",f:false},
+  {c:"Sets Pricing",d:"Flow and Sculpt set pricing",f:false},
+  {c:"Flash Sale",d:"24-hour limited time offer, configurable",f:true},
+  {c:"VIP Members",d:"Exclusive discount for loyalty programme members",f:false}
+];
+
+function pad(n){return n<10?'0'+n:''+n}
+function liTag(i){
+  if(i.a)return' <span class="li-tag solid">'+i.a+'</span>';
+  if(i.d)return' <span class="li-tag solid">Custom Build</span>';
+  if(i.x)return' <span class="li-tag">'+i.x+'</span>';
+  return'';
+}
+
+(function(){
+  var g=document.getElementById('pageGrid');
+  g.innerHTML=PAGES.map(function(p){
+    var prev=p.prev.slice(0,4).map(function(i){return'<li>'+i+'</li>';}).join('');
+    var rem=(p.prev.length-4)+(p.more||0);
+    var more=rem>0?'<div class="gc-more">+'+rem+' more</div>':'';
+    var flags=p.flags.length?'<div class="gc-flags">'+p.flags.map(function(f){return'<span class="gc-flag'+(f==='Custom Build'?' solid':'')+'">'+f+'</span>';}).join('')+'</div>':'';
+    return'<div class="gc" onclick="openSheet('+(p.n-1)+')">'
+      +'<div class="gc-title">'+p.title+'</div>'
+      +'<div class="gc-desc">'+p.desc+'</div>'
+      +'<ul class="gc-list">'+prev+'</ul>'
+      +more+flags
+      +'<div class="gc-cta">Open &#8594;</div>'
+      +'</div>';
+  }).join('');
+})();
+
+(function(){
+  document.getElementById('appsGrid').innerHTML=APPS.map(function(a){
+    return'<div class="atile"><div class="atile-n">'+a.n+'</div><div class="atile-r">'+a.r+'</div></div>';
+  }).join('');
+})();
+
+(function(){
+  document.getElementById('promoGrid').innerHTML=PROMOS.map(function(p,i){
+    return'<div class="pcrd'+(p.f?' ft':'')+'"><div class="pcrd-code">'+p.c+'</div><div class="pcrd-desc">'+p.d+'</div></div>';
+  }).join('');
+})();
+
+
+var currentIdx=0;
+
+function openSheet(idx){
+  currentIdx=idx;
+  var p=PAGES[idx];
+  document.getElementById('shN').textContent=pad(p.n);
+  document.getElementById('shTitle').textContent=p.title;
+  document.getElementById('shDesc').textContent=p.desc;
+  document.getElementById('shBody').innerHTML=p.secs.map(function(s){
+    return'<div><div class="ssec-t">'+s.t+'</div><ul class="ssec-ul">'
+      +s.li.map(function(i){return'<li>'+i.v+liTag(i)+'</li>';}).join('')+'</ul></div>';
+  }).join('');
+  var saved=localStorage.getItem('be_note_'+idx)||'';
+  document.getElementById('shNotesTa').value=saved;
+  document.getElementById('shNotesStatus').textContent=saved?'Note saved':'';
+  document.getElementById('sheet').classList.add('on');
+  document.getElementById('overlay').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+
+function saveNote(){
+  var note=document.getElementById('shNotesTa').value.trim();
+  if(note){localStorage.setItem('be_note_'+currentIdx,note);}
+  else{localStorage.removeItem('be_note_'+currentIdx);}
+  updateBadge(currentIdx);
+  var s=document.getElementById('shNotesStatus');
+  s.textContent='Saved';
+  setTimeout(function(){s.textContent=note?'Note saved':'';},1800);
+}
+
+function showSendModal(){
+  var hasNotes=PAGES.some(function(_,i){return!!localStorage.getItem('be_note_'+i);});
+  var body=document.getElementById('modalBody');
+  var confirm=document.getElementById('modalConfirm');
+  if(!hasNotes){
+    body.textContent='No notes have been saved yet. Add notes to pages before sending.';
+    confirm.style.display='none';
+  } else {
+    body.textContent='All saved notes will be compiled and sent to Ardent for review. Please allow 30 minutes before submitting a new note.';
+    confirm.style.display='';
+  }
+  document.getElementById('sendModal').classList.add('on');
+}
+
+function closeSendModal(){
+  document.getElementById('sendModal').classList.remove('on');
+}
+
+function confirmSend(){
+  var notes=[];
+  PAGES.forEach(function(p,i){
+    var note=localStorage.getItem('be_note_'+i);
+    if(note)notes.push({page:p.title,note:note});
+  });
+  var readable='Bird Eye: Website Notes\nSubmitted: '+new Date().toLocaleString()+'\n\n';
+  notes.forEach(function(n){readable+='---\n'+n.page.toUpperCase()+'\n'+n.note+'\n\n';});
+  readable+='\n\n--- IMPORT DATA ---\n'+JSON.stringify(notes);
+  var subject=encodeURIComponent('Bird Eye: Website Notes');
+  var body=encodeURIComponent(readable);
+  closeSendModal();
+  window.location.href='mailto:shivamrmahtani@gmail.com?subject='+subject+'&body='+body;
+}
+
+function toggleImport(){
+  var box=document.getElementById('importBox');
+  box.classList.toggle('on');
+}
+
+function importNotes(){
+  try{
+    var data=JSON.parse(document.getElementById('importTa').value.trim());
+    data.forEach(function(item){
+      var idx=PAGES.findIndex(function(p){return p.title===item.page;});
+      if(idx>-1&&item.note){localStorage.setItem('be_note_'+idx,item.note);}
+    });
+    loadBadges();
+    document.getElementById('importBox').classList.remove('on');
+    document.getElementById('importTa').value='';
+  } catch(e){alert('Invalid notes data. Please paste the full import block from the email.');}
+}
+
+function clearNote(){
+  document.getElementById('shNotesTa').value='';
+  localStorage.removeItem('be_note_'+currentIdx);
+  updateBadge(currentIdx);
+  document.getElementById('shNotesStatus').textContent='';
+}
+
+function updateBadge(idx){
+  var cards=document.querySelectorAll('.gc');
+  if(!cards[idx])return;
+  var existing=cards[idx].querySelector('.gc-note');
+  var note=localStorage.getItem('be_note_'+idx);
+  if(note&&!existing){
+    var b=document.createElement('div');
+    b.className='gc-note';
+    b.innerHTML='<span class="gc-note-dot"></span>Note';
+    cards[idx].appendChild(b);
+  } else if(!note&&existing){
+    existing.remove();
+  }
+}
+
+function loadBadges(){
+  PAGES.forEach(function(_,i){updateBadge(i);});
+}
+loadBadges();
+function closeSheet(){
+  document.getElementById('sheet').classList.remove('on');
+  document.getElementById('overlay').classList.remove('on');
+  document.body.style.overflow='';
+}
+function scrollTo(id){
+  document.querySelector(id).scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('.island-btn').forEach(function(b){b.classList.remove('on')});
+  event.target.classList.add('on');
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
+var btns=document.querySelectorAll('.island-btn');
+var secs=['#pages','#apps','#promos'];
+window.addEventListener('scroll',function(){
+  var y=window.scrollY+200;
+  secs.forEach(function(id,i){
+    var el=document.querySelector(id);
+    if(el&&el.offsetTop<=y){
+      btns.forEach(function(b){b.classList.remove('on')});
+      if(btns[i])btns[i].classList.add('on');
+    }
+  });
+},{passive:true});
+</script>
+</body>
+</html>
