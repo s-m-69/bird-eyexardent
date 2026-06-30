@@ -221,6 +221,11 @@ body::before{
   color:rgba(255,255,255,.38);white-space:nowrap;flex-shrink:0;
 }
 .li-tag.solid{background:rgba(255,255,255,.88);color:#000;border-color:transparent}
+.li-tag.link{
+  cursor:pointer;color:rgba(255,255,255,.62);border-color:rgba(255,255,255,.20);
+  transition:background .15s,color .15s,border-color .15s;
+}
+.li-tag.link:hover{background:rgba(255,255,255,.12);color:rgba(255,255,255,.92);border-color:rgba(255,255,255,.32)}
 
 /* APP GRID */
 .agrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
@@ -623,6 +628,7 @@ body::before{
   <span class="island-mark">Ardent x Bird Eye</span>
   <nav class="island-nav">
     <button class="island-btn on" onclick="navTo(event,'#pages')">Pages</button>
+    <button class="island-btn" onclick="navTo(event,'#patterns')">Patterns</button>
     <button class="island-btn" onclick="navTo(event,'#apps')">Apps</button>
     <button class="island-btn" onclick="navTo(event,'#promos')">Promotions</button>
   </nav>
@@ -642,6 +648,16 @@ body::before{
     <div class="section-line"></div>
   </div>
   <div class="pgrid" id="pageGrid"></div>
+</section>
+
+<!-- PATTERNS -->
+<section class="section" id="patterns">
+  <div class="section-hdr">
+    <span class="section-lbl">Patterns</span>
+    <div class="section-line"></div>
+  </div>
+  <p class="section-note">Shared components used across multiple pages. Built once, referenced everywhere it appears.</p>
+  <div class="pgrid" id="patternGrid"></div>
 </section>
 
 <!-- APPS -->
@@ -755,10 +771,10 @@ body::before{
 <script>
 var PAGES=[
   {n:1,title:"Home",desc:"Main landing page",flags:[],
-   prev:["Hero video or static image","Bestsellers section","Collections grid","Celebrity and influencer spotting","Customer UGC and testimonials"],more:12,
+   prev:["Hero video or static image","Bestsellers section","Collections grid","Style Inspiration shoppable UGC","Celebrity and influencer spotting"],more:12,
    secs:[
     {t:"Top Bar",li:[{v:"Scrolling announcement bar, updated regularly by client"}]},
-    {t:"Hero",li:[{v:"Full-width video or static image, swappable"},{v:"Multiple slides and videos in sequence"},{v:"Lifestyle and outdoor photoshoot imagery"}]},
+    {t:"Hero",li:[{v:"Two banner formats supported: video, and still image"},{v:"Still image preferred for content swapped frequently, faster to update than video"},{v:"Banner UI elements transition from transparent to white on hover, keeps controls unobtrusive over varied backgrounds"},{v:"Multiple slides and videos in sequence"},{v:"Lifestyle and outdoor photoshoot imagery"}]},
     {t:"Subscribe Popup",li:[{v:"Email capture on first visit",a:"SendWill"},{v:"Image changeable by client"}]},
     {t:"Homepage Sections",li:[
       {v:"Bestsellers section with product grid"},{v:"Collections grid: Tops, Bottoms, Matching Sets, Shop by Activity"},
@@ -766,36 +782,40 @@ var PAGES=[
       {v:"Compare Products teaser and CTA"},{v:"Brand story and vision text block"},
       {v:"3D and 2D render graphics"},{v:"BTS images"},
       {v:"Celebrity and influencer spotting grid",x:"Asset"},{v:"PR magazine logo strip",x:"Asset"},
-      {v:"Customer UGC images and reels",x:"Asset"},{v:"Testimonials"},
+      {v:"Testimonials"},
       {v:"Instagram feed",a:"Vitals"},{v:"Shipping and product info graphics"},
       {v:"Recent blog posts from Bird Eye Journal"},{v:"FAQs section"}
     ]},
+    {t:"Style Inspiration",li:[{v:"Shoppable UGC carousel. Reference: Alo.",d:true,x:"Asset"},{v:"Carousel of real customer and creator photos"},{v:"Tap-to-reveal product hotspots on each photo"},{v:"Mini product card on tap, with item name and link to shop"},{v:"Creator handle credited under each photo"}]},
     {t:"Footer",li:[
       {v:"FAQs"},{v:"Job opportunities"},{v:"Influencer inquiry"},{v:"Affiliate and loyalty program"},
       {v:"Gift card"},{v:"Track your order"},{v:"Policy links: Privacy, Terms, Shipping, Refund"},{v:"Contact info"}
     ]}
    ]},
   {n:2,title:"Shop All",desc:"Full product catalogue",flags:[],
-   prev:["Full product grid","Filters: colour, size, activity","Sort: newest, bestselling, price"],
-   secs:[{t:"Features",li:[{v:"Full product grid"},{v:"Filters: colour, size, activity, collection"},{v:"Sort: newest, bestselling, price"}]}]},
+   prev:["Shop by Category circular browser","Full product grid","Quick Add on every product","Sort: newest, bestselling, price"],more:2,
+   secs:[
+    {t:"Shop by Category",li:[{v:"Circular category thumbnail browser at top of page. Reference: Oner Active."},{v:"All, Leggings, Joggers, Wide Leg Bottoms, Sports Bras, Shorts, Skorts and Dresses, Tops, Hoodies, Jackets, All in Ones"},{v:"Active category underlined"}]},
+    {t:"Features",li:[{v:"Full product grid"},{v:"Filters: colour, size, activity, collection"},{v:"Sort: newest, bestselling, price"},{v:"Quick Add on every product",ref:{s:"pattern",i:0,l:"Quick Add Panel"}}]}
+   ]},
   {n:3,title:"New Collections",desc:"Latest arrivals",flags:[],
    prev:["New arrivals product grid","Filters and sort options"],
-   secs:[{t:"Features",li:[{v:"New arrivals product grid"},{v:"Filters and sort options"}]}]},
+   secs:[{t:"Features",li:[{v:"New arrivals product grid"},{v:"Filters and sort options"},{v:"Quick Add on every product",ref:{s:"pattern",i:0,l:"Quick Add Panel"}}]}]},
   {n:4,title:"Tops",desc:"3 sub-categories",flags:[],
-   prev:["All Tops","Sports Bras","Jackets and Tees"],
-   secs:[{t:"Sub-pages",li:[{v:"All Tops"},{v:"Sports Bras"},{v:"Jackets and Tees"}]},{t:"Each Sub-page",li:[{v:"Product grid"},{v:"Colour and size filters"},{v:"Sort options"}]}]},
+   prev:["All Tops","Sports Bras, includes Bra Support Guide","Jackets and Tees"],
+   secs:[{t:"Sub-pages",li:[{v:"All Tops"},{v:"Sports Bras, every product page includes the Bra Support Guide",ref:{s:"page",i:9,l:"Product Page"}},{v:"Jackets and Tees"}]},{t:"Each Sub-page",li:[{v:"Product grid"},{v:"Colour and size filters"},{v:"Sort options"},{v:"Quick Add on every product",ref:{s:"pattern",i:0,l:"Quick Add Panel"}}]}]},
   {n:5,title:"Bottoms",desc:"3 sub-categories",flags:[],
    prev:["All Bottoms","Leggings","Shorts and Skirts"],
-   secs:[{t:"Sub-pages",li:[{v:"All Bottoms"},{v:"Leggings"},{v:"Shorts and Skirts"}]},{t:"Each Sub-page",li:[{v:"Product grid"},{v:"Colour and size filters"},{v:"Sort options"}]}]},
+   secs:[{t:"Sub-pages",li:[{v:"All Bottoms"},{v:"Leggings"},{v:"Shorts and Skirts"}]},{t:"Each Sub-page",li:[{v:"Product grid"},{v:"Colour and size filters"},{v:"Sort options"},{v:"Quick Add on every product",ref:{s:"pattern",i:0,l:"Quick Add Panel"}}]}]},
   {n:6,title:"Matching Sets",desc:"All matching combinations",flags:[],
    prev:["All combinations displayed","Filter by colour, style, activity","Links directly to each set"],
-   secs:[{t:"Features",li:[{v:"All matching set combinations displayed together"},{v:"Filter by colour, style, activity"},{v:"Links directly to each combination"}]}]},
+   secs:[{t:"Features",li:[{v:"All matching set combinations displayed together"},{v:"Filter by colour, style, activity"},{v:"Links directly to each combination"},{v:"Quick Add on every product",ref:{s:"pattern",i:0,l:"Quick Add Panel"}}]}]},
   {n:7,title:"Shop by Activity",desc:"5 activity sub-pages",flags:[],
    prev:["Yoga","Running","Gym","Pilates","Court"],
-   secs:[{t:"Sub-pages",li:[{v:"Yoga"},{v:"Running"},{v:"Gym"},{v:"Pilates"},{v:"Court"}]},{t:"Each Sub-page",li:[{v:"Filtered product grid for that activity"},{v:"Relevant filters and sort options"}]}]},
+   secs:[{t:"Sub-pages",li:[{v:"Yoga"},{v:"Running"},{v:"Gym"},{v:"Pilates"},{v:"Court"}]},{t:"Each Sub-page",li:[{v:"Filtered product grid for that activity"},{v:"Relevant filters and sort options"},{v:"Quick Add on every product",ref:{s:"pattern",i:0,l:"Quick Add Panel"}}]}]},
   {n:8,title:"Shop by Colour",desc:"Colour-based product browse",flags:[],
    prev:["Colour swatch grid","Tap to browse all products in that colour"],
-   secs:[{t:"Features",li:[{v:"Colour swatch grid"},{v:"Tap a swatch to browse all products in that colour"},{v:"Product grid filtered by selected colour"}]}]},
+   secs:[{t:"Features",li:[{v:"Colour swatch grid"},{v:"Tap a swatch to browse all products in that colour"},{v:"Product grid filtered by selected colour"},{v:"Quick Add on every product",ref:{s:"pattern",i:0,l:"Quick Add Panel"}}]}]},
   {n:9,title:"Compare Products",desc:"Dynamic side-by-side comparison",flags:["Custom Build"],
    prev:["Select 2 to 3 products","Side-by-side comparison table","Fit, material, compression, sizes, activity"],
    secs:[
@@ -804,23 +824,40 @@ var PAGES=[
     {t:"Before Build Can Start",li:[{v:"All products need fit, material, compression, and activity data entered as metafields. Data entry task. Start early."}]}
    ]},
   {n:10,title:"Product Page",desc:"Template applied to every product",flags:["Custom Build"],
-   prev:["Multiple product shots with zoom","Sticky Add to Cart","Match and Go","Complete the Look","AI Fit recommender"],more:14,
+   prev:["Multiple product shots with zoom","Sticky Add to Cart","Style Your Product With pairing carousel","Match and Go","AI Fit recommender"],more:15,
    secs:[
     {t:"Images",li:[{v:"Front, back, left, right, and close-up feature shots"},{v:"Graphic feature images with callout text overlaid"},{v:"Zoom on hover and tap"},{v:"All images resized and optimised"},{v:"Influencer and customer UGC",x:"Asset"},{v:"AI-generated fabric videos"}]},
     {t:"Product Info",li:[{v:"All colours grouped under one listing"},{v:"Colour order reviewed and updated"},{v:"Icons near Add to Cart and Buy Now"},{v:"Sticky Add to Cart"},{v:"Stock scarcity indicator",a:"Vitals"},{v:"Coupon codes visible on page"},{v:"Recent purchases display"}]},
     {t:"Description Sections",li:[{v:"What's new and exciting"},{v:"What makes it so good"},{v:"Reasons to adore it"},{v:"Fit information"},{v:"Wash care and info"},{v:"What it's made of"}]},
     {t:"Size and Fit",li:[{v:"Size chart: updated measurements, images, expanded info",a:"Kiwi"},{v:"AI Fit recommender: size from height, weight, fit preference",a:"Kiwi"},{v:"Notify Me When Available",a:"Vitals"}]},
-    {t:"Discovery and Upsell",li:[{v:"Complete the Look: colour-aware outfit suggestions",d:true},{v:"Match and Go: links directly to matching product by colour",d:true},{v:"Outfit inspiration section"},{v:"You may also like"},{v:"Featured collection"},{v:"Recently viewed"}]},
+    {t:"Style Your Product With",li:[{v:"Pairing carousel. Reference: Lorna Jane.",d:true},{v:"Split layout: hero product or promo on the left, pairing carousel on the right"},{v:"Each card: styled image, product name, price, discount badge, wishlist heart"},{v:"Quick Add action on each card, shared Quick Add component"},{v:"Replaces prior Complete the Look and Outfit Inspiration entries on this page"}]},
+    {t:"Bra Support Guide",li:[{v:"Sports bras only",x:"Conditional"},{v:"Visual scale: Light, Medium, High support"},{v:"Relevant level highlighted per product"},{v:"Appears on every sports bra product page"}]},
+    {t:"Discovery and Upsell",li:[{v:"Match and Go: links directly to matching product by colour",d:true},{v:"You may also like"},{v:"Featured collection"},{v:"Recently viewed"}]},
     {t:"Fabric and Quality",li:[{v:"Fabric quality and tech info block"},{v:"Graphic quality and feature icons"}]},
     {t:"Delivery and Returns",li:[{v:"Delivery timeline and pincode checker"},{v:"Shipping info"},{v:"Exchange and return policy summary"}]},
     {t:"Reviews",li:[{v:"Product reviews with images",a:"Vitals"},{v:"More reviews across all products"},{v:"Reviews from Instagram and customer testimonials"}]}
    ]},
-  {n:11,title:"Cart",desc:"Upsell and offers at checkout",flags:[],
-   prev:["You may also like","Recommended products","Offers and coupon codes","Progress bar to next reward"],
-   secs:[{t:"Features",li:[{v:"You may also like"},{v:"Recommended products"},{v:"Active offers and coupon codes"},{v:"Note from the brand"},{v:"Progress bar toward next reward",a:"Kite"}]}]},
-  {n:12,title:"Fabric Guide",desc:"Fabric technology and materials",flags:["Needs Assets"],
-   prev:["Fabric names and descriptions","Fabric technology icons","AI fabric images","Materials across the range"],
-   secs:[{t:"Content",li:[{v:"Fabric names and descriptions"},{v:"Logo guide: fabric technology icons"},{v:"AI-generated fabric images"},{v:"Fabrics used across the product range"}]},{t:"Visual References",li:[{v:"Lululemon fabric guide"},{v:"Alo Yoga fabrication guide"}]}]},
+  {n:11,title:"Cart",desc:"Tiered rewards drawer, modeled on Moxie",flags:["Custom Build","Pending Input"],
+   prev:["Tiered progress bar with unlocks","Claim your freebies module","Complete the Look bundle carousel","Pending: tiers, copy, and SKU from Pragya"],more:10,
+   secs:[
+    {t:"Progress Bar",li:[{v:"Sticky tiered rewards bar at top of cart. Reference: Moxie.",d:true},{v:"Bird Eye tiers: order over Rs 2,000 unlocks free Bird keychain"},{v:"Order over Rs 5,000 unlocks free big keychain"},{v:"Congrats messaging on unlock, nudge messaging toward next tier"},{v:"Bar updates live as cart value changes"}]},
+    {t:"Claim Your Freebies",li:[{v:"Dedicated claim module, unlocked items appear with a Claim button"},{v:"Free items shown as line items, original price struck through to Rs 0"},{v:"Tied directly to the progress bar tiers above"}]},
+    {t:"Complete the Look",li:[{v:"Horizontal carousel inside the cart. Reference: Moxie Complete Your Routine.",d:true},{v:"Surfaces full sets and outfit pairings, not single SKUs"},{v:"One-tap Add to Cart per bundle"},{v:"Distinct from the Style Your Product With carousel on the product page"}]},
+    {t:"Cart Line Items",li:[{v:"Quantity stepper on each line item"},{v:"Clear subtotal"},{v:"Tax included, shipping calculated at checkout note"}]},
+    {t:"Checkout CTA",li:[{v:"Gifts waiting at checkout badge near the buy button"},{v:"Prominent Buy Now CTA with express payment icons"}]},
+    {t:"Open Items, Pending Pragya",li:[
+      {v:"Exact progress bar tiers, thresholds, and copy",x:"Pending Input"},
+      {v:"Confirm exact product name and SKU for the Rs 5,000 big keychain, and how it differs from the Rs 2,000 Bird keychain",x:"Pending Input"},
+      {v:"Whether freebie tiers and any discount or shipping tiers stack in one bar or display separately",x:"Pending Input"}
+    ]}
+   ]},
+  {n:12,title:"Fabric Guide",desc:"Fabric technology, materials, and Compare Fabrics",flags:["Needs Assets"],
+   prev:["Fabric names and descriptions","Compare Fabrics module","AI fabric images","Materials across the range"],more:4,
+   secs:[
+    {t:"Content",li:[{v:"Fabric names and descriptions"},{v:"Logo guide: fabric technology icons"},{v:"AI-generated fabric images"},{v:"Fabrics used across the product range"}]},
+    {t:"Compare Fabrics",li:[{v:"Side-by-side fabric comparison cards. Reference: Alo.",d:true},{v:"One card per fabric family, with a fabric swatch image and name"},{v:"Structured rows: Look, Feel, Fit, Where to Wear"},{v:"Small icons next to Feel attributes: compression, breathability, stretch, weight"}]},
+    {t:"Visual References",li:[{v:"Lululemon fabric guide"},{v:"Alo Yoga fabrication guide"},{v:"Alo Compare Fabrics module"}]}
+   ]},
   {n:13,title:"Blog / Journal",desc:"Bird Eye Journal editorial hub",flags:[],
    prev:["Article listing page","Individual article pages","Categories and tags"],
    secs:[{t:"Features",li:[{v:"Article listing page"},{v:"Individual article pages"},{v:"Categories and tags"}]}]},
@@ -849,6 +886,15 @@ var PAGES=[
    prev:["Privacy Policy","Terms of Service","Shipping Policy","Refund Policy"],
    secs:[{t:"Pages",li:[{v:"Privacy Policy"},{v:"Terms of Service"},{v:"Shipping Policy"},{v:"Refund Policy"}]}]}
 ];
+var PATTERNS=[
+  {title:"Quick Add Panel",desc:"Shared component, shop grid and pairing carousels",flags:["Custom Build"],
+   prev:["Slide-in panel from the right","Scrollable product images","Colour and size selection","Add to Cart without leaving the page"],
+   secs:[
+    {t:"How It Works",li:[{v:"Slide-in panel from the right, darkened overlay behind it. Reference: Oner Active.",d:true},{v:"Triggered from product grid cards on every shop and collection page"},{v:"Also triggered from Quick Add links inside the Style Your Product With carousel"},{v:"One shared component, not rebuilt per page"}]},
+    {t:"Panel Contents",li:[{v:"Scrollable product images"},{v:"Product name and price"},{v:"Colour swatch selection"},{v:"Size grid selection"},{v:"Add to Cart button"},{v:"See full details link through to the full product page"}]}
+   ]}
+];
+
 var APPS=[
   {n:"Return Prime",r:"Returns and exchanges"},
   {n:"Vitals",r:"Reviews, Instagram feed, back-in-stock, stock scarcity"},
@@ -877,6 +923,7 @@ var PROMOS=[
 
 function pad(n){return n<10?'0'+n:''+n}
 function liTag(i){
+  if(i.ref)return' <span class="li-tag link" onclick="event.stopPropagation();openSheet('+i.ref.i+',\'' + i.ref.s + '\')">'+i.ref.l+' &#8599;</span>';
   if(i.a)return' <span class="li-tag solid">'+i.a+'</span>';
   if(i.d)return' <span class="li-tag solid">Custom Build</span>';
   if(i.x)return' <span class="li-tag">'+i.x+'</span>';
@@ -890,7 +937,25 @@ function liTag(i){
     var rem=(p.prev.length-4)+(p.more||0);
     var more=rem>0?'<div class="gc-more">+'+rem+' more</div>':'';
     var flags=p.flags.length?'<div class="gc-flags">'+p.flags.map(function(f){return'<span class="gc-flag'+(f==='Custom Build'?' solid':'')+'">'+f+'</span>';}).join('')+'</div>':'';
-    return'<div class="gc" onclick="openSheet('+(p.n-1)+')">'
+    return'<div class="gc" onclick="openSheet('+(p.n-1)+',\'page\')">'
+      +'<div class="gc-title">'+p.title+'</div>'
+      +'<div class="gc-desc">'+p.desc+'</div>'
+      +'<ul class="gc-list">'+prev+'</ul>'
+      +more+flags
+      +'<div class="gc-cta">&#8599;</div>'
+      +'</div>';
+  }).join('');
+})();
+
+(function(){
+  var g=document.getElementById('patternGrid');
+  if(!g)return;
+  g.innerHTML=PATTERNS.map(function(p,idx){
+    var prev=p.prev.slice(0,4).map(function(i){return'<li>'+i+'</li>';}).join('');
+    var rem=p.prev.length-4;
+    var more=rem>0?'<div class="gc-more">+'+rem+' more</div>':'';
+    var flags=p.flags.length?'<div class="gc-flags">'+p.flags.map(function(f){return'<span class="gc-flag'+(f==='Custom Build'?' solid':'')+'">'+f+'</span>';}).join('')+'</div>':'';
+    return'<div class="gc" onclick="openSheet('+idx+',\'pattern\')">'
       +'<div class="gc-title">'+p.title+'</div>'
       +'<div class="gc-desc">'+p.desc+'</div>'
       +'<ul class="gc-list">'+prev+'</ul>'
@@ -914,18 +979,22 @@ function liTag(i){
 
 
 var currentIdx=0;
+var currentSource='page';
 
-function openSheet(idx){
+function noteKey(source,idx){return 'be_note_'+source+'_'+idx;}
+
+function openSheet(idx,source){
   currentIdx=idx;
-  var p=PAGES[idx];
-  document.getElementById('shN').textContent=pad(p.n);
+  currentSource=source||'page';
+  var p=currentSource==='pattern'?PATTERNS[idx]:PAGES[idx];
+  document.getElementById('shN').textContent=currentSource==='pattern'?'PATTERN':pad(p.n);
   document.getElementById('shTitle').textContent=p.title;
   document.getElementById('shDesc').textContent=p.desc;
   document.getElementById('shBody').innerHTML=p.secs.map(function(s){
     return'<div><div class="ssec-t">'+s.t+'</div><ul class="ssec-ul">'
       +s.li.map(function(i){return'<li>'+i.v+liTag(i)+'</li>';}).join('')+'</ul></div>';
   }).join('');
-  var saved=localStorage.getItem('be_note_'+idx)||'';
+  var saved=localStorage.getItem(noteKey(currentSource,idx))||'';
   document.getElementById('shNotesTa').value=saved;
   document.getElementById('shNotesStatus').textContent=saved?'Note saved':'';
   document.getElementById('notePopup').classList.remove('on');
@@ -948,9 +1017,9 @@ function toggleNotePopup(){
 }
 function saveNote(){
   var note=document.getElementById('shNotesTa').value.trim();
-  if(note){localStorage.setItem('be_note_'+currentIdx,note);}
-  else{localStorage.removeItem('be_note_'+currentIdx);}
-  updateBadge(currentIdx);
+  if(note){localStorage.setItem(noteKey(currentSource,currentIdx),note);}
+  else{localStorage.removeItem(noteKey(currentSource,currentIdx));}
+  updateBadge(currentIdx,currentSource);
   var s=document.getElementById('shNotesStatus');
   s.textContent='Saved';
   setTimeout(function(){s.textContent=note?'Note saved':'';},1800);
@@ -977,8 +1046,12 @@ function closeSendModal(){
 function confirmSend(){
   var notes=[];
   PAGES.forEach(function(p,i){
-    var note=localStorage.getItem('be_note_'+i);
-    if(note)notes.push({page:p.title,note:note});
+    var note=localStorage.getItem(noteKey('page',i));
+    if(note)notes.push({page:p.title,note:note,source:'page'});
+  });
+  PATTERNS.forEach(function(p,i){
+    var note=localStorage.getItem(noteKey('pattern',i));
+    if(note)notes.push({page:p.title,note:note,source:'pattern'});
   });
   var readable='Bird Eye: Website Notes\nSubmitted: '+new Date().toLocaleString()+'\n\n';
   notes.forEach(function(n){readable+='---\n'+n.page.toUpperCase()+'\n'+n.note+'\n\n';});
@@ -998,8 +1071,10 @@ function importNotes(){
   try{
     var data=JSON.parse(document.getElementById('importTa').value.trim());
     data.forEach(function(item){
-      var idx=PAGES.findIndex(function(p){return p.title===item.page;});
-      if(idx>-1&&item.note){localStorage.setItem('be_note_'+idx,item.note);}
+      var src=item.source||'page';
+      var arr=src==='pattern'?PATTERNS:PAGES;
+      var idx=arr.findIndex(function(p){return p.title===item.page;});
+      if(idx>-1&&item.note){localStorage.setItem(noteKey(src,idx),item.note);}
     });
     loadBadges();
     document.getElementById('importBox').classList.remove('on');
@@ -1009,16 +1084,20 @@ function importNotes(){
 
 function clearNote(){
   document.getElementById('shNotesTa').value='';
-  localStorage.removeItem('be_note_'+currentIdx);
-  updateBadge(currentIdx);
+  localStorage.removeItem(noteKey(currentSource,currentIdx));
+  updateBadge(currentIdx,currentSource);
   document.getElementById('shNotesStatus').textContent='';
 }
 
-function updateBadge(idx){
-  var cards=document.querySelectorAll('.gc');
+function updateBadge(idx,source){
+  source=source||'page';
+  var gridId=source==='pattern'?'patternGrid':'pageGrid';
+  var grid=document.getElementById(gridId);
+  if(!grid)return;
+  var cards=grid.querySelectorAll('.gc');
   if(!cards[idx])return;
   var existing=cards[idx].querySelector('.gc-note');
-  var note=localStorage.getItem('be_note_'+idx);
+  var note=localStorage.getItem(noteKey(source,idx));
   if(note&&!existing){
     var b=document.createElement('div');
     b.className='gc-note';
@@ -1028,11 +1107,12 @@ function updateBadge(idx){
     existing.remove();
   }
   var fab=document.getElementById('noteFab');
-  if(fab&&idx===currentIdx)fab.classList.toggle('has-note',!!note);
+  if(fab&&idx===currentIdx&&source===currentSource)fab.classList.toggle('has-note',!!note);
 }
 
 function loadBadges(){
-  PAGES.forEach(function(_,i){updateBadge(i);});
+  PAGES.forEach(function(_,i){updateBadge(i,'page');});
+  PATTERNS.forEach(function(_,i){updateBadge(i,'pattern');});
 }
 loadBadges();
 function closeSheet(){
@@ -1046,6 +1126,7 @@ function closeSheet(){
   document.body.style.overflow='';
 }
 // Welcome modal
+document.body.style.overflow='hidden';
 (function(){
   setTimeout(function(){
     document.getElementById('welcomeWrap').classList.add('on');
@@ -1053,6 +1134,7 @@ function closeSheet(){
 })();
 function dismissWelcome(){
   document.getElementById('welcomeWrap').classList.remove('on');
+  document.body.style.overflow='';
 }
 
 function showApprove(e){
@@ -1087,7 +1169,7 @@ function toggleIsland(e){
 
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
 var btns=document.querySelectorAll('.island-btn');
-var secs=['#pages','#apps','#promos'];
+var secs=['#pages','#patterns','#apps','#promos'];
 window.addEventListener('scroll',function(){
   var y=window.scrollY+200;
   secs.forEach(function(id,i){
