@@ -529,6 +529,97 @@ body::before{
   padding:7px 16px;cursor:pointer;font-family:inherit;width:100%;
 }
 
+/* EASTER EGG TRIGGER */
+.egg-trigger{
+  cursor:pointer;color:rgba(255,255,255,.18);
+  padding:4px 5px;margin-left:2px;
+  display:inline-flex;align-items:center;
+  transition:color .2s;
+  user-select:none;
+  vertical-align:middle;
+}
+.egg-trigger:hover{color:rgba(255,255,255,.45)}
+
+/* GAMBLE MODAL */
+.gamble-wrap{
+  position:fixed;inset:0;z-index:700;
+  background:rgba(0,0,0,.92);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;opacity:0;pointer-events:none;
+  transition:opacity .4s;
+}
+.gamble-wrap.on{opacity:1;pointer-events:all}
+.gamble-card{
+  background:rgba(14,14,14,.98);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:28px;padding:48px 44px;
+  max-width:440px;width:100%;text-align:center;
+  box-shadow:0 40px 100px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.06);
+}
+.gamble-eyebrow{
+  font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);margin-bottom:18px;
+}
+.gamble-title{
+  font-size:24px;font-weight:300;color:rgba(255,255,255,.94);
+  letter-spacing:-.02em;margin-bottom:8px;line-height:1.25;
+}
+.gamble-title strong{font-weight:600;color:#FFD75E}
+.gamble-sub{
+  font-size:12.5px;font-weight:400;color:rgba(255,255,255,.34);
+  line-height:1.7;margin-bottom:36px;
+}
+
+.slot-row{
+  display:flex;gap:8px;justify-content:center;margin-bottom:28px;
+}
+.slot-reel{
+  width:96px;height:96px;border-radius:16px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.10);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;
+}
+.slot-reel-inner{
+  font-size:30px;font-weight:700;color:#FFD75E;
+  letter-spacing:-.02em;
+}
+.slot-reel.spinning .slot-reel-inner{
+  animation:slotspin .12s linear infinite;
+}
+@keyframes slotspin{
+  0%{transform:translateY(-6px);opacity:.4}
+  50%{transform:translateY(0);opacity:1}
+  100%{transform:translateY(6px);opacity:.4}
+}
+
+.gamble-btn{
+  background:rgba(255,255,255,.92);color:#000;
+  font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  border:none;border-radius:100px;padding:15px 34px;
+  cursor:pointer;transition:all .15s;width:100%;
+}
+.gamble-btn:hover{background:#fff}
+.gamble-btn:disabled{opacity:.3;cursor:not-allowed}
+.gamble-result{
+  font-size:14px;font-weight:500;color:rgba(255,255,255,.85);
+  margin-top:22px;line-height:1.6;min-height:20px;
+}
+.gamble-result strong{color:#FF6B6B}
+.gamble-close{
+  margin-top:24px;
+  font-size:10px;font-weight:400;letter-spacing:.06em;
+  color:rgba(255,255,255,.22);background:none;border:none;
+  cursor:pointer;font-family:inherit;transition:color .15s;
+}
+.gamble-close:hover{color:rgba(255,255,255,.55)}
+.gamble-played{
+  font-size:12px;font-weight:400;color:rgba(255,255,255,.30);
+  line-height:1.7;padding:16px 0;
+}
+
 /* FOOTER */
 .footer{
   border-top:1px solid rgba(255,255,255,.06);
@@ -682,7 +773,20 @@ body::before{
 
 <footer class="footer">
   <span class="footer-l">Ardent</span>
-  <span class="footer-r">Prepared for Bird Eye &nbsp;&middot;&nbsp; June 2026</span>
+  <span class="footer-r">Prepared for Bird Eye &nbsp;&middot;&nbsp; June 2026 <span class="egg-trigger" id="eggTrigger" onclick="openGamble()">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="12" y1="1.2" x2="12" y2="4.3" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="12" y1="19.7" x2="12" y2="22.8" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="1.2" y1="12" x2="4.3" y2="12" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="19.7" y1="12" x2="22.8" y2="12" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="4.2" y1="4.2" x2="6.3" y2="6.3" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="17.7" y1="17.7" x2="19.8" y2="19.8" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="4.2" y1="19.8" x2="6.3" y2="17.7" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="17.7" y1="6.3" x2="19.8" y2="4.2" stroke="currentColor" stroke-width="1.6"/>
+    </svg>
+  </span></span>
 </footer>
 
 <!-- WELCOME MODAL -->
@@ -709,6 +813,23 @@ body::before{
       <button class="approve-cancel" onclick="closeApprove()">Go Back</button>
       <button class="approve-confirm" onclick="confirmApprove()">Yes, Approve</button>
     </div>
+  </div>
+</div>
+
+<!-- GAMBLE -->
+<div class="gamble-wrap" id="gambleWrap">
+  <div class="gamble-card" id="gambleCard">
+    <div class="gamble-eyebrow">Confidential &middot; One Time Only</div>
+    <div class="gamble-title">Cut the invoice by <strong>50%</strong></div>
+    <div class="gamble-sub">Three matching symbols and you win.</div>
+    <div class="slot-row">
+      <div class="slot-reel" id="reel1"><div class="slot-reel-inner" id="r1">?</div></div>
+      <div class="slot-reel" id="reel2"><div class="slot-reel-inner" id="r2">?</div></div>
+      <div class="slot-reel" id="reel3"><div class="slot-reel-inner" id="r3">?</div></div>
+    </div>
+    <button class="gamble-btn" id="gambleBtn" onclick="spinGamble()">Spin to Cut the Invoice</button>
+    <div class="gamble-result" id="gambleResult"></div>
+    <button class="gamble-close" onclick="closeGamble()">Close</button>
   </div>
 </div>
 
@@ -1159,6 +1280,63 @@ function confirmApprove(){
   var body=encodeURIComponent('Hi Shivam,\n\nThe Bird Eye buildbook has been approved.\n\nThe build is ready to move to the design and development team for execution.\n\nApproved on: '+new Date().toLocaleString());
   closeApprove();
   window.location.href='mailto:shivamrmahtani@gmail.com?subject='+subject+'&body='+body;
+}
+
+// Gamble easter egg, one-time only
+var GAMBLE_SYMBOLS=['50%','50%','50%','FULL','FULL'];
+function gambleAlreadyPlayed(){
+  return localStorage.getItem('be_gamble_played')==='1';
+}
+function openGamble(){
+  var wrap=document.getElementById('gambleWrap');
+  var btn=document.getElementById('gambleBtn');
+  var result=document.getElementById('gambleResult');
+  ['r1','r2','r3'].forEach(function(id){document.getElementById(id).textContent='?';});
+  if(gambleAlreadyPlayed()){
+    btn.style.display='none';
+    result.innerHTML='<div class="gamble-played">Already spun once. That was the deal.</div>';
+  } else {
+    btn.style.display='block';
+    btn.disabled=false;
+    btn.textContent='Spin to Cut the Invoice';
+    result.innerHTML='';
+  }
+  wrap.classList.add('on');
+}
+function closeGamble(){
+  document.getElementById('gambleWrap').classList.remove('on');
+}
+function spinGamble(){
+  if(gambleAlreadyPlayed())return;
+  var btn=document.getElementById('gambleBtn');
+  var result=document.getElementById('gambleResult');
+  btn.disabled=true;
+  btn.textContent='Spinning...';
+  var reels=['reel1','reel2','reel3'];
+  var labels=['r1','r2','r3'];
+  reels.forEach(function(id){document.getElementById(id).classList.add('spinning');});
+
+  var spinInterval=setInterval(function(){
+    labels.forEach(function(id){
+      document.getElementById(id).textContent=GAMBLE_SYMBOLS[Math.floor(Math.random()*GAMBLE_SYMBOLS.length)];
+    });
+  },80);
+
+  var stopTimes=[1400,2000,2600];
+  var finalSymbols=['50%','50%','FULL'];
+  stopTimes.forEach(function(t,i){
+    setTimeout(function(){
+      document.getElementById(reels[i]).classList.remove('spinning');
+      document.getElementById(labels[i]).textContent=finalSymbols[i];
+    },t);
+  });
+
+  setTimeout(function(){
+    clearInterval(spinInterval);
+    localStorage.setItem('be_gamble_played','1');
+    result.innerHTML='So close. <strong>Pay in full, founder.</strong> Worth a shot though.';
+    btn.style.display='none';
+  },2900);
 }
 
 function toggleIsland(e){
