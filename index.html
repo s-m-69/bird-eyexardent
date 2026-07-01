@@ -771,7 +771,7 @@ body::before{
     <button class="island-btn" onclick="navTo(event,'#apps')">Apps</button>
     <button class="island-btn" onclick="navTo(event,'#promos')">Promotions</button>
   </nav>
-  <button class="island-approve" onclick="showApprove(event)">Approve</button>
+  <button class="island-approve" onclick="event.stopPropagation();document.getElementById('approveWrap').classList.add('on')">Approve</button>
 </div>
 
 <!-- HERO -->
@@ -1191,12 +1191,25 @@ function toggleNotePopup(){
 }
 function saveNote(){
   var note=document.getElementById('shNotesTa').value.trim();
-  if(note){localStorage.setItem(noteKey(currentSource,currentIdx),note);}
-  else{localStorage.removeItem(noteKey(currentSource,currentIdx));}
-  updateBadge(currentIdx,currentSource);
-  var s=document.getElementById('shNotesStatus');
-  s.textContent='Saved';
-  setTimeout(function(){s.textContent=note?'Note saved':'';},1800);
+  try{
+    if(note){localStorage.setItem(noteKey(currentSource,currentIdx),note);}
+    else{localStorage.removeItem(noteKey(currentSource,currentIdx));}
+    updateBadge(currentIdx,currentSource);
+    var s=document.getElementById('shNotesStatus');
+    var fab=document.getElementById('noteFab');
+    s.style.color='rgba(255,255,255,.75)';
+    s.textContent=note?'Saved':'Cleared';
+    if(fab)fab.classList.toggle('has-note',!!note);
+    setTimeout(function(){
+      s.textContent=note?'Note saved':'';
+      s.style.color='';
+    },2000);
+  }catch(err){
+    var s=document.getElementById('shNotesStatus');
+    s.style.color='#FF6B6B';
+    s.textContent='Could not save, try a different browser';
+    setTimeout(function(){s.textContent='';s.style.color='';},3000);
+  }
 }
 
 function showSendModal(){
@@ -1259,8 +1272,10 @@ function importNotes(){
 
 function clearNote(){
   document.getElementById('shNotesTa').value='';
-  localStorage.removeItem(noteKey(currentSource,currentIdx));
+  try{localStorage.removeItem(noteKey(currentSource,currentIdx));}catch(e){}
   updateBadge(currentIdx,currentSource);
+  var fab=document.getElementById('noteFab');
+  if(fab)fab.classList.remove('has-note');
   document.getElementById('shNotesStatus').textContent='';
 }
 
@@ -1332,8 +1347,13 @@ function closeApprove(){
 function confirmApprove(){
   var subject=encodeURIComponent('Bird Eye Buildbook: Approved');
   var body=encodeURIComponent('Hi Shivam,\n\nThe Bird Eye buildbook has been approved.\n\nThe build is ready to move to the design and development team for execution.\n\nApproved on: '+new Date().toLocaleString());
+  var mailto='mailto:shivamrmahtani@gmail.com?subject='+subject+'&body='+body;
   closeApprove();
-  window.location.href='mailto:shivamrmahtani@gmail.com?subject='+subject+'&body='+body;
+  try{
+    var a=document.createElement('a');
+    a.href=mailto;a.target='_blank';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+  }catch(e){window.location.href=mailto;}
 }
 
 // Gamble easter egg, one-time only
