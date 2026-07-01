@@ -869,7 +869,7 @@ body::before{
   <div class="gamble-card" id="gambleCard">
     <div class="gamble-eyebrow">Confidential &middot; One Time Only</div>
     <div class="gamble-title">Cut the invoice by <strong>50%</strong></div>
-    <div class="gamble-sub">Three matching symbols, you win.</div>
+    <div class="gamble-sub">Three matching symbols, you win. Akshay, you already know the odds. Spin anyway.</div>
     <div class="cabinet">
       <div class="cabinet-lights" id="lightsTop"></div>
       <div class="reel-row">
@@ -1200,7 +1200,8 @@ function saveNote(){
 }
 
 function showSendModal(){
-  var hasNotes=PAGES.some(function(_,i){return!!localStorage.getItem('be_note_'+i);});
+  var hasNotes=PAGES.some(function(_,i){return!!localStorage.getItem(noteKey('page',i));})
+    ||PATTERNS.some(function(_,i){return!!localStorage.getItem(noteKey('pattern',i));});
   var body=document.getElementById('modalBody');
   var confirm=document.getElementById('modalConfirm');
   if(!hasNotes){
