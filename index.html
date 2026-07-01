@@ -571,28 +571,73 @@ body::before{
   line-height:1.7;margin-bottom:36px;
 }
 
-.slot-row{
-  display:flex;gap:8px;justify-content:center;margin-bottom:28px;
+/* SLOT MACHINE */
+.cabinet{
+  background:linear-gradient(180deg,#222018 0%,#0a0a0a 60%);
+  border:1px solid rgba(255,215,94,.3);
+  border-radius:22px;
+  padding:20px 20px 22px;
+  margin:0 auto 28px;
+  max-width:316px;
+  box-shadow:0 24px 56px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.4);
+  position:relative;
 }
-.slot-reel{
-  width:96px;height:96px;border-radius:16px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.10);
-  display:flex;align-items:center;justify-content:center;
+.cabinet-lights{
+  display:flex;justify-content:space-between;padding:0 2px 16px;
+}
+.cabinet-light{
+  width:5px;height:5px;border-radius:50%;
+  background:rgba(255,215,94,.25);
+  box-shadow:0 0 0 rgba(255,215,94,0);
+  transition:box-shadow .3s,background .3s;
+}
+.cabinet-light.lit{
+  background:#FFD75E;
+  box-shadow:0 0 6px 1px rgba(255,215,94,.7);
+}
+.reel-row{
+  display:flex;
+  background:#000;border-radius:10px;
+  border:2px solid rgba(255,215,94,.18);
+  position:relative;overflow:hidden;
+  box-shadow:inset 0 6px 20px rgba(0,0,0,.85),inset 0 -4px 12px rgba(0,0,0,.6);
+}
+.reel-row.flash{animation:reelFlash .5s ease}
+@keyframes reelFlash{
+  0%{box-shadow:inset 0 6px 20px rgba(0,0,0,.85),inset 0 -4px 12px rgba(0,0,0,.6)}
+  35%{box-shadow:0 0 32px 6px rgba(255,215,94,.45),inset 0 6px 20px rgba(0,0,0,.6)}
+  100%{box-shadow:inset 0 6px 20px rgba(0,0,0,.85),inset 0 -4px 12px rgba(0,0,0,.6)}
+}
+.payline{
+  position:absolute;left:0;right:0;top:50%;
+  height:2px;background:linear-gradient(90deg,transparent,#FFD75E 20%,#FFD75E 80%,transparent);
+  transform:translateY(-1px);z-index:3;pointer-events:none;opacity:.55;
+}
+.reel-window{
+  width:88px;height:96px;
   overflow:hidden;position:relative;
+  background:linear-gradient(180deg,#050505 0%,#171717 50%,#050505 100%);
+  border-right:1px solid rgba(255,215,94,.16);
 }
-.slot-reel-inner{
-  font-size:30px;font-weight:700;color:#FFD75E;
-  letter-spacing:-.02em;
+.reel-window:last-child{border-right:none}
+.reel-window::before{
+  content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.78) 0%,transparent 32%,transparent 68%,rgba(0,0,0,.78) 100%);
 }
-.slot-reel.spinning .slot-reel-inner{
-  animation:slotspin .12s linear infinite;
+.reel-strip{
+  display:flex;flex-direction:column;
+  transition:transform 3.6s cubic-bezier(.08,.82,.1,1);
 }
-@keyframes slotspin{
-  0%{transform:translateY(-6px);opacity:.4}
-  50%{transform:translateY(0);opacity:1}
-  100%{transform:translateY(6px);opacity:.4}
+.reel-strip.blur{filter:blur(4px)}
+.reel-cell{
+  width:88px;height:96px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:42px;line-height:1;
 }
+.cabinet-base{
+  display:flex;justify-content:center;gap:6px;padding-top:16px;
+}
+.cabinet-light.dim{opacity:.3}
 
 .gamble-btn{
   background:rgba(255,255,255,.92);color:#000;
@@ -606,7 +651,10 @@ body::before{
 .gamble-result{
   font-size:14px;font-weight:500;color:rgba(255,255,255,.85);
   margin-top:22px;line-height:1.6;min-height:20px;
+  opacity:0;transform:translateY(4px);
+  transition:opacity .4s,transform .4s;
 }
+.gamble-result.show{opacity:1;transform:translateY(0)}
 .gamble-result strong{color:#FF6B6B}
 .gamble-close{
   margin-top:24px;
@@ -821,11 +869,16 @@ body::before{
   <div class="gamble-card" id="gambleCard">
     <div class="gamble-eyebrow">Confidential &middot; One Time Only</div>
     <div class="gamble-title">Cut the invoice by <strong>50%</strong></div>
-    <div class="gamble-sub">Three matching symbols and you win.</div>
-    <div class="slot-row">
-      <div class="slot-reel" id="reel1"><div class="slot-reel-inner" id="r1">?</div></div>
-      <div class="slot-reel" id="reel2"><div class="slot-reel-inner" id="r2">?</div></div>
-      <div class="slot-reel" id="reel3"><div class="slot-reel-inner" id="r3">?</div></div>
+    <div class="gamble-sub">Three matching symbols, you win.</div>
+    <div class="cabinet">
+      <div class="cabinet-lights" id="lightsTop"></div>
+      <div class="reel-row">
+        <div class="payline"></div>
+        <div class="reel-window"><div class="reel-strip" id="strip1"></div></div>
+        <div class="reel-window"><div class="reel-strip" id="strip2"></div></div>
+        <div class="reel-window"><div class="reel-strip" id="strip3"></div></div>
+      </div>
+      <div class="cabinet-base" id="lightsBottom"></div>
     </div>
     <button class="gamble-btn" id="gambleBtn" onclick="spinGamble()">Spin to Cut the Invoice</button>
     <div class="gamble-result" id="gambleResult"></div>
@@ -1283,18 +1336,113 @@ function confirmApprove(){
 }
 
 // Gamble easter egg, one-time only
-var GAMBLE_SYMBOLS=['50%','50%','50%','FULL','FULL'];
+var SLOT_SYMBOLS=['\ud83d\udcb0','7\ufe0f\u20e3','\ud83d\udc8e','\ud83c\udf40','\ud83d\udd14','\u2b50','\ud83c\udf52','\ud83c\udfb0'];
+var CELL_H=96;
+var lightInterval=null;
+
+function buildLights(){
+  var top=document.getElementById('lightsTop');
+  var bottom=document.getElementById('lightsBottom');
+  if(top&&!top.children.length){
+    for(var i=0;i<10;i++){var d=document.createElement('div');d.className='cabinet-light';top.appendChild(d);}
+  }
+  if(bottom&&!bottom.children.length){
+    for(var j=0;j<10;j++){var d2=document.createElement('div');d2.className='cabinet-light dim';bottom.appendChild(d2);}
+  }
+}
+
+function startLightChase(){
+  var lights=document.querySelectorAll('#lightsTop .cabinet-light');
+  if(!lights.length)return;
+  var i=0;
+  clearInterval(lightInterval);
+  lightInterval=setInterval(function(){
+    lights.forEach(function(l,idx){l.classList.toggle('lit',idx%2===i%2);});
+    i++;
+  },140);
+}
+function stopLightChase(){
+  clearInterval(lightInterval);
+  document.querySelectorAll('#lightsTop .cabinet-light').forEach(function(l){l.classList.remove('lit');});
+}
+
+// Sound, generated with Web Audio, no external files needed
+var audioCtx=null;
+function getAudioCtx(){
+  if(!audioCtx){
+    try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}
+  }
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  return audioCtx;
+}
+function playTone(freq,duration,type,startGain,delay){
+  var ctx=getAudioCtx();
+  if(!ctx)return;
+  try{
+    var t0=ctx.currentTime+(delay||0);
+    var osc=ctx.createOscillator();
+    var gain=ctx.createGain();
+    osc.type=type||'sine';
+    osc.frequency.setValueAtTime(freq,t0);
+    gain.gain.setValueAtTime(startGain||0.12,t0);
+    gain.gain.exponentialRampToValueAtTime(0.001,t0+duration);
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0+duration);
+  }catch(e){}
+}
+function playSpinStart(){
+  playTone(140,0.5,'sawtooth',0.05);
+  playTone(280,0.3,'square',0.03,0.05);
+}
+function playReelStop(){
+  playTone(180,0.08,'square',0.1);
+  playTone(90,0.1,'sine',0.08,0.02);
+}
+function playLoseChime(){
+  playTone(523,0.15,'sine',0.09);
+  setTimeout(function(){playTone(415,0.18,'sine',0.09);},130);
+  setTimeout(function(){playTone(311,0.32,'sine',0.08);},270);
+}
+
+function buildStrip(stripEl,finalSymbol,landingIndex){
+  var arr=[];
+  for(var i=0;i<landingIndex;i++){
+    arr.push(SLOT_SYMBOLS[Math.floor(Math.random()*SLOT_SYMBOLS.length)]);
+  }
+  arr[landingIndex]=finalSymbol;
+  arr.push(SLOT_SYMBOLS[Math.floor(Math.random()*SLOT_SYMBOLS.length)]);
+  stripEl.innerHTML=arr.map(function(s){return '<div class="reel-cell">'+s+'</div>';}).join('');
+}
+
+function resetReels(){
+  var strips=[document.getElementById('strip1'),document.getElementById('strip2'),document.getElementById('strip3')];
+  strips.forEach(function(s){
+    if(!s)return;
+    s.style.transition='none';
+    buildStrip(s,SLOT_SYMBOLS[Math.floor(Math.random()*SLOT_SYMBOLS.length)],10);
+    s.style.transform='translateY(0px)';
+    s.classList.remove('blur');
+    void s.offsetWidth;
+    s.style.transition='';
+  });
+}
+
 function gambleAlreadyPlayed(){
   return localStorage.getItem('be_gamble_played')==='1';
 }
 function openGamble(){
+  stopLightChase();
+  buildLights();
+  resetReels();
   var wrap=document.getElementById('gambleWrap');
   var btn=document.getElementById('gambleBtn');
   var result=document.getElementById('gambleResult');
-  ['r1','r2','r3'].forEach(function(id){document.getElementById(id).textContent='?';});
+  result.classList.remove('show');
   if(gambleAlreadyPlayed()){
     btn.style.display='none';
     result.innerHTML='<div class="gamble-played">Already spun once. That was the deal.</div>';
+    requestAnimationFrame(function(){result.classList.add('show');});
   } else {
     btn.style.display='block';
     btn.disabled=false;
@@ -1304,39 +1452,80 @@ function openGamble(){
   wrap.classList.add('on');
 }
 function closeGamble(){
+  stopLightChase();
   document.getElementById('gambleWrap').classList.remove('on');
 }
+
+function spinReel(stripEl,finalSymbol,durationMs){
+  var landingIndex=16+Math.floor(Math.random()*4);
+  buildStrip(stripEl,finalSymbol,landingIndex);
+  stripEl.style.transition='none';
+  stripEl.style.transform='translateY(0px)';
+  void stripEl.offsetWidth;
+  stripEl.classList.add('blur');
+  stripEl.style.transition='transform '+(durationMs/1000)+'s cubic-bezier(.08,.82,.1,1)';
+  stripEl.style.transform='translateY(-'+(landingIndex*CELL_H)+'px)';
+  setTimeout(function(){stripEl.classList.remove('blur');},durationMs-280);
+}
+
 function spinGamble(){
   if(gambleAlreadyPlayed())return;
   var btn=document.getElementById('gambleBtn');
   var result=document.getElementById('gambleResult');
+  var row=document.querySelector('.reel-row');
   btn.disabled=true;
   btn.textContent='Spinning...';
-  var reels=['reel1','reel2','reel3'];
-  var labels=['r1','r2','r3'];
-  reels.forEach(function(id){document.getElementById(id).classList.add('spinning');});
+  result.classList.remove('show');
+  result.innerHTML='';
 
-  var spinInterval=setInterval(function(){
-    labels.forEach(function(id){
-      document.getElementById(id).textContent=GAMBLE_SYMBOLS[Math.floor(Math.random()*GAMBLE_SYMBOLS.length)];
-    });
-  },80);
+  playSpinStart();
+  startLightChase();
 
-  var stopTimes=[1400,2000,2600];
-  var finalSymbols=['50%','50%','FULL'];
-  stopTimes.forEach(function(t,i){
-    setTimeout(function(){
-      document.getElementById(reels[i]).classList.remove('spinning');
-      document.getElementById(labels[i]).textContent=finalSymbols[i];
-    },t);
+  // Randomised near miss, varies every time, never a real 3-match win.
+  // Two reels share a random symbol, the third reel always gets a
+  // different one, and which physical reel breaks it is also random.
+  var nearSymbol=SLOT_SYMBOLS[Math.floor(Math.random()*SLOT_SYMBOLS.length)];
+  var missReel=Math.floor(Math.random()*3);
+  var missPool=SLOT_SYMBOLS.filter(function(s){return s!==nearSymbol;});
+  var missSymbol=missPool[Math.floor(Math.random()*missPool.length)];
+
+  var symbols=[nearSymbol,nearSymbol,nearSymbol];
+  symbols[missReel]=missSymbol;
+
+  // The mismatched reel always lands last, for the reveal beat.
+  var fastTimes=[2300,2900].sort(function(){return Math.random()-0.5;});
+  var durations=[0,0,0];
+  var fastSlot=0;
+  for(var i=0;i<3;i++){
+    durations[i]=(i===missReel)?3650:fastTimes[fastSlot++];
+  }
+
+  spinReel(document.getElementById('strip1'),symbols[0],durations[0]);
+  spinReel(document.getElementById('strip2'),symbols[1],durations[1]);
+  spinReel(document.getElementById('strip3'),symbols[2],durations[2]);
+
+  durations.forEach(function(d){
+    setTimeout(playReelStop,d);
   });
 
+  var lines=[
+    'Two out of three. <strong>Pay in full, founder.</strong> Worth a shot though.',
+    'So close. <strong>Pay in full, founder.</strong> The house always wins.',
+    'Almost had it. <strong>Pay in full, founder.</strong> Nice try.',
+    'One symbol away. <strong>Pay in full, founder.</strong> That\u2019s the deal.'
+  ];
+
+  var maxDuration=Math.max.apply(null,durations);
+
   setTimeout(function(){
-    clearInterval(spinInterval);
+    stopLightChase();
+    if(row){row.classList.add('flash');setTimeout(function(){row.classList.remove('flash');},500);}
+    playLoseChime();
     localStorage.setItem('be_gamble_played','1');
-    result.innerHTML='So close. <strong>Pay in full, founder.</strong> Worth a shot though.';
+    result.innerHTML=lines[Math.floor(Math.random()*lines.length)];
+    requestAnimationFrame(function(){result.classList.add('show');});
     btn.style.display='none';
-  },2900);
+  },maxDuration+300);
 }
 
 function toggleIsland(e){
