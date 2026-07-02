@@ -204,6 +204,56 @@ body::before{
 }
 .sh-body::-webkit-scrollbar{width:3px}
 .sh-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.10);border-radius:2px}
+
+/* REVENUE UNLOCKED MODULE */
+.rev-wrap{grid-column:1/-1}
+.rev-box{
+  background:linear-gradient(135deg,rgba(8,28,22,.98) 0%,rgba(4,16,14,.99) 100%);
+  border:1px solid rgba(0,200,140,.18);
+  border-radius:14px;padding:20px 22px 18px;
+  position:relative;overflow:hidden;
+}
+.rev-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,transparent,rgba(0,200,140,.7) 40%,rgba(0,200,140,.7) 60%,transparent);
+}
+.rev-box::after{
+  content:'';position:absolute;
+  bottom:-40px;right:-40px;
+  width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,200,140,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.rev-label{
+  font-size:8.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(0,200,140,.65);margin-bottom:16px;display:block;
+}
+.rev-scenarios{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:12px;margin-bottom:14px;
+}
+.rev-scenario{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:9px;padding:12px 14px;
+}
+.rev-scenario-lbl{
+  font-size:9px;font-weight:400;letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(255,255,255,.28);margin-bottom:6px;
+}
+.rev-scenario-val{
+  font-size:24px;font-weight:700;color:rgba(255,255,255,.95);
+  letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;
+}
+.rev-scenario-sub{
+  font-size:9.5px;font-weight:400;color:rgba(255,255,255,.28);
+  margin-top:4px;
+}
+.rev-note{
+  border-top:1px solid rgba(255,255,255,.06);padding-top:12px;
+  font-size:11px;font-weight:400;color:rgba(0,200,140,.60);
+  line-height:1.55;
+}
 .ssec-t{
   font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
   color:rgba(255,255,255,.25);margin-bottom:12px;padding-bottom:8px;
@@ -530,7 +580,12 @@ body::before{
   padding:7px 16px;cursor:pointer;font-family:inherit;width:100%;
 }
 
-/* EASTER EGG TRIGGER */
+/* INSIGHT CARDS - same pattern as page cards */
+.gc-metric{
+  font-size:36px;font-weight:700;color:rgba(255,255,255,.92);
+  letter-spacing:-.03em;line-height:1;margin-bottom:14px;
+  font-variant-numeric:tabular-nums;
+}/* EASTER EGG TRIGGER */
 .egg-trigger{
   cursor:pointer;color:rgba(255,255,255,.18);
   padding:4px 5px;margin-left:2px;
@@ -767,7 +822,8 @@ body::before{
   <span class="island-mobile-lbl">Bird Eye x Ardent</span>
   <span class="island-mark">Ardent x Bird Eye</span>
   <nav class="island-nav">
-    <button class="island-btn on" onclick="navTo(event,'#pages')">Pages</button>
+    <button class="island-btn on" onclick="navTo(event,'#insight')">Opportunity</button>
+    <button class="island-btn" onclick="navTo(event,'#pages')">Pages</button>
     <button class="island-btn" onclick="navTo(event,'#patterns')">Patterns</button>
     <button class="island-btn" onclick="navTo(event,'#apps')">Apps</button>
     <button class="island-btn" onclick="navTo(event,'#promos')">Promotions</button>
@@ -780,6 +836,19 @@ body::before{
   <div class="hero-name">Bird Eye</div>
   <div class="hero-sub">x Ardent: Website</div>
 </section>
+
+<!-- WHY WE BUILD -->
+<section class="section" id="insight">
+  <div class="section-hdr">
+    <span class="section-lbl">How We See Your Success</span>
+    <div class="section-line"></div>
+  </div>
+  <p class="section-note">Six numbers from Bird Eye&#8217;s June 2026 data. Each one is a documented opportunity. Click any card to see the full analysis and how the build addresses it.</p>
+  <div class="pgrid" id="insightGrid"></div>
+</section>
+
+
+
 
 <!-- PAGES -->
 <section class="section" id="pages">
@@ -944,6 +1013,186 @@ body::before{
 </div>
 
 <script>
+var INSIGHTS=[
+  {
+    metric:"0.07%",
+    title:"The Conversion Gap",
+    desc:"21x below category benchmark",
+    prev:[
+      "148,644 visitors in June. Only a fraction purchased.",
+      "Indian D2C athleisure benchmark: 1 to 1.5% conversion",
+      "At 1%: approximately ₹40L additional per month",
+      "At 2%: approaches ₹86L at current traffic levels"
+    ],
+    secs:[
+      {t:"The Numbers",li:[
+        {v:"148,644 sessions in June."},
+        {v:"Shopify analytics shows a 0.07% conversion rate."},
+        {v:"Indian D2C athleisure benchmark: 1 to 1.5% for optimised sites."},
+        {v:"The gap is 21x. Bird Eye has traffic. The issue is what happens to it."}
+      ]},
+      {t:"Revenue Unlocked",type:"rev",items:[
+        {label:"At 1% conversion",value:"₹43.3L",sub:"per month additional"},
+        {label:"At 2% conversion",value:"₹86.6L",sub:"per month additional"}
+      ],note:"Every 0.1% improvement at current traffic = ₹4.3L more per month. This is at existing traffic with no additional ad spend."},
+      {t:"What We Are Building",li:[
+        {v:"Full trust layer: UGC, celebrity spotting, PR logos, verified reviews across every page"},
+        {v:"Product pages that answer every size and fabric question before checkout"},
+        {v:"Mobile-first architecture built for the 88.6% arriving on a phone"},
+        {v:"A cart experience that moves people through rather than losing them"}
+      ]}
+    ]
+  },
+  {
+    metric:"75.6%",
+    title:"The Cart Wall",
+    desc:"13,526 sessions lost before checkout",
+    prev:[
+      "17,887 added to cart. Only 4,361 reached checkout.",
+      "Every 100 sessions recovered = ₹2.91L in revenue",
+      "Loss aversion: earned freebies create a reason to proceed",
+      "Complete the Look builds the basket before checkout"
+    ],
+    secs:[
+      {t:"The Numbers",li:[
+        {v:"17,887 items added to cart in June."},
+        {v:"Only 4,361 people moved to checkout. 13,526 did not."},
+        {v:"75.6% of cart sessions abandoned before seeing a single checkout field."},
+        {v:"Industry average cart-to-checkout drop: 55 to 65%."}
+      ]},
+      {t:"Revenue Unlocked",type:"rev",items:[
+        {label:"Per 100 sessions recovered",value:"₹2.91L",sub:"at ₹2,910 AOV"},
+        {label:"Drop from 75.6% to 60%",value:"+₹2.1L",sub:"per month minimum"}
+      ],note:"The checkout fix compounds on top of this. Both improvements work together."},
+      {t:"What the Moxie Cart Does",li:[
+        {v:"Tiered progress bar: earned freebies at ₹2,000 create loss aversion against abandoning"},
+        {v:"Claim Your Freebies module makes unlocked rewards feel already owned"},
+        {v:"Complete the Look carousel deepens the basket before checkout"},
+        {v:"Gifts waiting at checkout badge creates perceived loss if the tab closes"}
+      ]}
+    ]
+  },
+  {
+    metric:"97.3%",
+    title:"The Checkout Problem",
+    desc:"27 points above industry abandonment average",
+    prev:[
+      "4,361 reached checkout. 117 completed.",
+      "Industry standard: 65 to 70% abandonment at checkout",
+      "This is a checkout experience problem, not a product problem",
+      "Express payment, mobile flow, gifts badge address this"
+    ],
+    secs:[
+      {t:"The Numbers",li:[
+        {v:"4,361 people reached checkout in June. 117 completed."},
+        {v:"97.3% abandonment at the final step."},
+        {v:"Industry standard: 65 to 70% checkout abandonment."},
+        {v:"27 percentage points between where Bird Eye is and where it should be."}
+      ]},
+      {t:"Revenue Unlocked",type:"rev",items:[
+        {label:"At 15% completion rate",value:"₹19L",sub:"per month from existing checkout traffic"},
+        {label:"At 30% completion rate",value:"₹38L",sub:"per month from existing checkout traffic"}
+      ],note:"This is the single highest-impact lever in the entire funnel. No additional traffic required."},
+      {t:"What We Are Building",li:[
+        {v:"Express payment options (UPI, GPay, Paytm) prominent and thumb-accessible on mobile"},
+        {v:"Gifts waiting at checkout badge: perceived loss if session ends before completing"},
+        {v:"Simplified mobile checkout flow: fewer taps between intent and order confirmed"},
+        {v:"Native browser prompt ensures checkout is never broken by embedded browser environments"}
+      ]}
+    ]
+  },
+  {
+    metric:"₹20.6L",
+    title:"The Return Drain",
+    desc:"731 units reversed. And that is only part of the cost.",
+    prev:[
+      "₹20.6L reversed revenue. RTO and logistics costs are on top.",
+      "Real monthly loss including RTO: ₹24L to ₹27L",
+      "25% return reduction = ₹5.15L recovered per month",
+      "40% reduction = ₹8.25L per month (₹99L annually)"
+    ],
+    secs:[
+      {t:"The Full Cost",li:[
+        {v:"₹20.6L is the reversed revenue. It does not include the full cost of a return."},
+        {v:"Reverse logistics: ₹80 to ₹150 per return shipment. 731 returns x ₹115 avg = ₹84,000 in pure courier costs."},
+        {v:"Restocking and quality inspection labour on every returned unit."},
+        {v:"For COD orders: the payment reversal handling cost and the original shipping cost are both lost."},
+        {v:"The real monthly loss from returns is conservatively ₹24L to ₹27L once all costs are included."}
+      ]},
+      {t:"Revenue Unlocked",type:"rev",items:[
+        {label:"25% return reduction",value:"₹5.15L",sub:"per month recovered"},
+        {label:"40% return reduction",value:"₹8.25L",sub:"per month (₹99L annually)"}
+      ],note:"Includes reversed revenue recovery. Logistics savings (₹21K to ₹33K/month) are additional."},
+      {t:"What We Are Building",li:[
+        {v:"AI Fit Recommender (Kiwi): height, weight, and fit preference gives the right size, not a guess"},
+        {v:"Bra Support Guide: Light, Medium, High scale eliminates the most common sports bra return reason"},
+        {v:"Compare Fabrics: a customer who selects medium compression gets exactly what they expected"},
+        {v:"Feature photography with callout overlays: no ambiguity about how the product fits"},
+        {v:"Dropdown descriptions for fit, wash care, and materials remove post-purchase surprises"}
+      ]}
+    ]
+  },
+  {
+    metric:"88.6%",
+    title:"The Mobile Reality",
+    desc:"131,700 of 148,644 sessions on a phone",
+    prev:[
+      "46.66% bounce rate: ~61,500 people leave without any interaction",
+      "Discovery on social, purchase decision in the same session",
+      "Every feature is built for thumb navigation first",
+      "Quick Add, sticky ATC, Moxie drawer, native browser prompt"
+    ],
+    secs:[
+      {t:"The Numbers",li:[
+        {v:"131,700 sessions per month on mobile. Desktop is 11%."},
+        {v:"46.66% bounce rate: roughly 61,500 people load Bird Eye on their phone and leave immediately."},
+        {v:"In Indian D2C, discovery happens on social and the purchase happens in the same session."},
+        {v:"The gap between the ad experience and the site experience is where intent is lost."}
+      ]},
+      {t:"Revenue Unlocked",type:"rev",items:[
+        {label:"Bounce rate from 46.6% to 35%",value:"+17.4K",sub:"additional engaging sessions per month"},
+        {label:"If 1% of those convert",value:"₹5.1L",sub:"per month at current AOV"}
+      ],note:"Mobile is not a secondary consideration. It is the entire addressable market for Bird Eye online."},
+      {t:"What We Are Building",li:[
+        {v:"Quick Add: select size and add to cart from the shop grid without opening the product page"},
+        {v:"Sticky Add to Cart: the buy action is always visible while reading about fit or fabric"},
+        {v:"Moxie cart drawer: full-height panel designed for thumb navigation"},
+        {v:"Compressed and optimised imagery: faster load on mobile connections"},
+        {v:"Native browser prompt: checkout is never broken by a reduced embedded browser environment"}
+      ]}
+    ]
+  },
+  {
+    metric:"₹2,910",
+    title:"The Upsell Foundation",
+    desc:"Already strong. The cart pushes it further.",
+    prev:[
+      "Customers are already buying sets and multiple pieces",
+      "Progress bar creates natural spend moments at ₹2,000 and ₹5,000",
+      "Bundle pricing nudges second and third items naturally",
+      "Higher AOV customers return less. The gains compound."
+    ],
+    secs:[
+      {t:"The Numbers",li:[
+        {v:"₹2,910 average order value in June, up 1.7% on prior period."},
+        {v:"Customers are already purchasing multiple pieces or full sets per order."},
+        {v:"This is strong behaviour to build on, not behaviour that needs creating."}
+      ]},
+      {t:"Revenue Unlocked",type:"rev",items:[
+        {label:"₹2,000 tier: +₹500 per order",value:"+20%",sub:"of orders cross tier, avg +₹500 spend"},
+        {label:"Bundle: 3 items (15% off)",value:"+₹1,500",sub:"avg additional item per bundled order"}
+      ],note:"AOV growth and return reduction compound. Customers who buy complete sets return less."},
+      {t:"What We Are Building",li:[
+        {v:"Tiered progress bar with reward unlocks at ₹2,000 and ₹5,000"},
+        {v:"Bundle pricing: 2 items 10% off, 3 items 15% off"},
+        {v:"Complete the Look carousel: one tap to add the natural pairing"},
+        {v:"Sets pricing for Flow and Sculpt combinations"},
+        {v:"Matching Sets page making full outfit purchases effortless"}
+      ]}
+    ]
+  }
+];
+
 var PAGES=[
   {n:1,title:"Home",desc:"Main landing page",flags:[],
    prev:["Hero video or static image","Bestsellers section","Collections grid","Style Inspiration shoppable UGC","Celebrity and influencer spotting"],more:12,
@@ -1122,6 +1371,57 @@ function liTag(i){
   }).join('');
 })();
 
+
+(function(){
+  var g=document.getElementById('insightGrid');
+  if(!g)return;
+  g.innerHTML=INSIGHTS.map(function(p,idx){
+    var prev=p.prev.slice(0,4).map(function(i){return'<li>'+i+'</li>';}).join('');
+    return'<div class="gc" onclick="openInsight('+idx+')">'
+      +'<div class="gc-metric">'+p.metric+'</div>'
+      +'<div class="gc-title">'+p.title+'</div>'
+      +'<div class="gc-desc">'+p.desc+'</div>'
+      +'<ul class="gc-list">'+prev+'</ul>'
+      +'<div class="gc-cta">&#8599;</div>'
+      +'</div>';
+  }).join('');
+})();
+
+function openInsight(idx){
+  currentIdx=idx;
+  currentSource='insight';
+  var p=INSIGHTS[idx];
+  document.getElementById('shN').textContent='';
+  document.getElementById('shN').textContent=p.metric;
+  document.getElementById('shTitle').textContent=p.title;
+  document.getElementById('shDesc').textContent=p.desc;
+  document.getElementById('shBody').innerHTML=p.secs.map(function(s){
+    if(s.type==='rev'){
+      var scens=s.items.map(function(it){
+        return'<div class="rev-scenario"><div class="rev-scenario-lbl">'+it.label+'</div>'
+          +'<div class="rev-scenario-val">'+it.value+'</div>'
+          +(it.sub?'<div class="rev-scenario-sub">'+it.sub+'</div>':'')+'</div>';
+      }).join('');
+      return'<div class="rev-wrap"><div class="rev-box">'
+        +'<span class="rev-label">Revenue Unlocked</span>'
+        +'<div class="rev-scenarios">'+scens+'</div>'
+        +(s.note?'<div class="rev-note">'+s.note+'</div>':'')
+        +'</div></div>';
+    }
+    return'<div><div class="ssec-t">'+s.t+'</div><ul class="ssec-ul">'
+      +s.li.map(function(i){return'<li>'+i.v+(i.a?' <span class="li-tag solid">'+i.a+'</span>':'')+'</li>';}).join('')+'</ul></div>';
+  }).join('');
+  var saved=localStorage.getItem(noteKey('insight',idx))||'';
+  document.getElementById('shNotesTa').value=saved;
+  document.getElementById('shNotesStatus').textContent=saved?'Note saved':'';
+  document.getElementById('notePopup').classList.remove('on');
+  var fab=document.getElementById('noteFab');
+  if(fab)fab.classList.toggle('has-note',!!saved);
+  document.getElementById('sheet').classList.add('on');
+  document.getElementById('overlay').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+
 (function(){
   var g=document.getElementById('patternGrid');
   if(!g)return;
@@ -1242,6 +1542,10 @@ function confirmSend(){
     var note=localStorage.getItem(noteKey('pattern',i));
     if(note)notes.push({page:p.title,note:note,source:'pattern'});
   });
+  INSIGHTS.forEach(function(p,i){
+    var note=localStorage.getItem(noteKey('insight',i));
+    if(note)notes.push({page:p.metric+' '+p.title,note:note,source:'insight'});
+  });
   var readable='Bird Eye: Website Notes\nSubmitted: '+new Date().toLocaleString()+'\n\n';
   notes.forEach(function(n){readable+='---\n'+n.page.toUpperCase()+'\n'+n.note+'\n\n';});
   readable+='\n\n--- IMPORT DATA ---\n'+JSON.stringify(notes);
@@ -1261,7 +1565,7 @@ function importNotes(){
     var data=JSON.parse(document.getElementById('importTa').value.trim());
     data.forEach(function(item){
       var src=item.source||'page';
-      var arr=src==='pattern'?PATTERNS:PAGES;
+      var arr=src==='insight'?INSIGHTS:src==='pattern'?PATTERNS:PAGES;
       var idx=arr.findIndex(function(p){return p.title===item.page;});
       if(idx>-1&&item.note){localStorage.setItem(noteKey(src,idx),item.note);}
     });
@@ -1304,6 +1608,7 @@ function updateBadge(idx,source){
 function loadBadges(){
   PAGES.forEach(function(_,i){updateBadge(i,'page');});
   PATTERNS.forEach(function(_,i){updateBadge(i,'pattern');});
+  INSIGHTS.forEach(function(_,i){updateBadge(i,'insight');});
 }
 loadBadges();
 function closeSheet(){
@@ -1552,7 +1857,7 @@ function toggleIsland(e){
 
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
 var btns=document.querySelectorAll('.island-btn');
-var secs=['#pages','#patterns','#apps','#promos'];
+var secs=['#insight','#pages','#patterns','#apps','#promos'];
 window.addEventListener('scroll',function(){
   var y=window.scrollY+200;
   secs.forEach(function(id,i){
