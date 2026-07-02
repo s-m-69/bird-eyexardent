@@ -437,8 +437,9 @@ body::before{
   color:#000;background:rgba(255,255,255,.92);
   border:1px solid transparent;border-radius:100px;
   padding:9px 20px;cursor:pointer;font-family:inherit;transition:all .15s;
+  text-decoration:none;display:inline-flex;align-items:center;
 }
-.approve-confirm:hover{background:#fff}
+.approve-confirm:hover{background:#fff;color:#000}
 
 /* SECTION NOTE */
 .section-note{
@@ -771,7 +772,7 @@ body::before{
     <button class="island-btn" onclick="navTo(event,'#apps')">Apps</button>
     <button class="island-btn" onclick="navTo(event,'#promos')">Promotions</button>
   </nav>
-  <button class="island-approve" onclick="event.stopPropagation();document.getElementById('approveWrap').classList.add('on')">Approve</button>
+  <button class="island-approve" onclick="showApprove(event)">Approve</button>
 </div>
 
 <!-- HERO -->
@@ -859,7 +860,7 @@ body::before{
     <div class="approve-body">By approving, you confirm that this buildbook accurately reflects your vision for the Bird Eye website. It will be sent to the Ardent design and development team to begin execution.</div>
     <div class="approve-btns">
       <button class="approve-cancel" onclick="closeApprove()">Go Back</button>
-      <button class="approve-confirm" onclick="confirmApprove()">Yes, Approve</button>
+      <a class="approve-confirm" id="approveLink" href="#" onclick="closeApprove()">Yes, Approve</a>
     </div>
   </div>
 </div>
@@ -1329,6 +1330,10 @@ function dismissWelcome(){
 
 function showApprove(e){
   if(e)e.stopPropagation();
+  var subject=encodeURIComponent('Bird Eye Buildbook: Approved');
+  var body=encodeURIComponent('Hi Shivam,\n\nThe Bird Eye buildbook has been approved.\n\nThe build is ready to move to the design and development team for execution.\n\nApproved on: '+new Date().toLocaleString());
+  var link=document.getElementById('approveLink');
+  if(link)link.href='mailto:shivamrmahtani@gmail.com?subject='+subject+'&body='+body;
   document.getElementById('approveWrap').classList.add('on');
 }
 
@@ -1344,17 +1349,7 @@ function navTo(e,id){
 function closeApprove(){
   document.getElementById('approveWrap').classList.remove('on');
 }
-function confirmApprove(){
-  var subject=encodeURIComponent('Bird Eye Buildbook: Approved');
-  var body=encodeURIComponent('Hi Shivam,\n\nThe Bird Eye buildbook has been approved.\n\nThe build is ready to move to the design and development team for execution.\n\nApproved on: '+new Date().toLocaleString());
-  var mailto='mailto:shivamrmahtani@gmail.com?subject='+subject+'&body='+body;
-  closeApprove();
-  try{
-    var a=document.createElement('a');
-    a.href=mailto;a.target='_blank';
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-  }catch(e){window.location.href=mailto;}
-}
+// confirmApprove removed, now handled by native <a> tag click
 
 // Gamble easter egg, one-time only
 var SLOT_SYMBOLS=['\ud83d\udcb0','7\ufe0f\u20e3','\ud83d\udc8e','\ud83c\udf40','\ud83d\udd14','\u2b50','\ud83c\udf52','\ud83c\udfb0'];
